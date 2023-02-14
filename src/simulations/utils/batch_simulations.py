@@ -61,6 +61,9 @@ def batch_simulate_tournaments_template(
         func_after_simulation: Callable[[pd.DataFrame], pd.DataFrame]
             Function to be applied after simulating data.
 
+            It mustn't modify the number of columns, that is, mustn't
+            aggregate results from different simulations together.
+
         *args, **kwargs
             'simulation_function' parameters other than 'num_simulations'.
 
