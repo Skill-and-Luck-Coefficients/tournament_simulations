@@ -59,7 +59,11 @@ class PointsPerMatch:
 
             return set(ppm_df.index.get_level_values("team"))
 
-        return self.df.groupby("id", observed=True).apply(_get_team_names_one_id)
+        return (
+            self.df.groupby("id", observed=True)
+            .apply(_get_team_names_one_id)
+            .rename("teams")
+        )
 
     @functools.cached_property
     def number_of_matches_per_id(self) -> pd.Series:
@@ -74,7 +78,11 @@ class PointsPerMatch:
             # each match is equivalent to 2 lines
             return ppm_df.shape[0] // 2
 
-        return self.df.groupby("id", observed=True).apply(_get_number_of_matches_one_id)
+        return (
+            self.df.groupby("id", observed=True)
+            .apply(_get_number_of_matches_one_id)
+            .rename("num matches")
+        )
 
     @functools.cached_property
     def probabilities_per_id(self) -> pd.Series:
@@ -111,6 +119,7 @@ class PointsPerMatch:
             self.df.loc[:, "points"]
             .groupby("id", observed=True)
             .apply(_create_probabilities_one_id)
+            .rename("probabilities")
         )
 
     @functools.cached_property

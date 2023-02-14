@@ -132,4 +132,6 @@ class Matches:
             )
         ]
 
-        return pd.Series(data=home_away_winner_data, index=self.df.index)
+        return pd.Series(
+            data=home_away_winner_data, index=self.df.index, name="home away winner"
+        )
