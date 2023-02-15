@@ -1,40 +1,17 @@
-from typing import Callable, Concatenate, ParamSpec, TypeVar
+from typing import Callable, ParamSpec
 
 import pandas as pd
 
-T = TypeVar("T", bound=pd.DataFrame)
 P = ParamSpec("P")
 
 
-def _batch_simulate_tournaments(
-    simulation_function: Callable[[Concatenate[int, P]], T],  # int: num_simulations
-    num_iterations: int,
-    num_simul_per_iteration: int,
-    func_after_simulation: Callable[[pd.DataFrame], pd.DataFrame],
-    *args: P.args,
-    **kwargs: P.kwargs,
-) -> pd.DataFrame:
-
-    simulations_to_concat: list[pd.DataFrame] = []
-
-    for _ in range(num_iterations):
-
-        simulation = simulation_function(
-            *args, num_simulations=num_simul_per_iteration, **kwargs
-        )
-        final_df = func_after_simulation(simulation)
-        simulations_to_concat.append(final_df)
-
-    return pd.concat(simulations_to_concat, axis=1)
-
-
-def _create_column_names(num_simulations) -> list[str]:
-    return [f"s{i}" for i in range(num_simulations)]
+def _create_column_names(num_cols: int, num_iteration: int) -> list[str]:
+    return [f"s{i + num_cols * num_iteration}" for i in range(num_cols)]
 
 
 def batch_simulate_tournaments_template(
-    simulation_function: Callable[[Concatenate[int, P]], T],  # int: num_simulations
-    num_iteration_simulation: tuple[int, int],
+    simulation_function: Callable[P, pd.DataFrame],
+    num_iterations: int,
     func_after_simulation: Callable[[pd.DataFrame], pd.DataFrame],
     *args: P.args,
     **kwargs: P.kwargs,
@@ -49,44 +26,39 @@ def batch_simulate_tournaments_template(
     -----
     Parameters:
 
-        simulation_function: Callable
+        simulation_function: Callable[[*args, **kwargs], pd.DataFrame]
             Simulation function.
 
-        num_iteration_simulation: tuple[int, int]
-            Respectively, number of iterations and number of
-            simulations per iteration (batch size).
-
-            This helps avoid using too much memory.
+        num_iterations: tuple[int, int]
+            Number of iterations (number of batches).
 
         func_after_simulation: Callable[[pd.DataFrame], pd.DataFrame]
             Function to be applied after simulating data.
 
-            It mustn't modify the number of columns, that is, mustn't
-            aggregate results from different simulations together.
-
         *args, **kwargs
-            'simulation_function' parameters other than 'num_simulations'.
+            'simulation_function' parameters.
 
     -----
     Returns:
         pd.DataFrame
-            By default, Information.
-                Index -> same as "ppm"
-                Columns -> each column has the points for a simulation
+            By default:
+                Index -> Index returned by simulation_function/func_after_simulated
+                Columns -> each column has data for a simulation
                     i-th simulation is named f"s{i}"
-
     """
 
-    num_iterations, num_simul_per_iteration = num_iteration_simulation
+    to_concat: list[pd.DataFrame] = []
 
-    simulations = _batch_simulate_tournaments(
-        simulation_function,
-        num_iterations,
-        num_simul_per_iteration,
-        func_after_simulation,
-        *args,
-        **kwargs,
-    )
+    for num_iteration in range(num_iterations):
 
-    total_simulations = num_iterations * num_simul_per_iteration
-    return simulations.set_axis(_create_column_names(total_simulations), axis="columns")
+        simulation = simulation_function(*args, **kwargs)
+
+        # simulated dataframes in all iterations have the same size, so this works
+        num_cols = len(simulation.columns)
+        col_names = _create_column_names(num_cols, num_iteration)
+        simulation_correct_cols = simulation.set_axis(col_names, axis="columns")
+
+        final_df = func_after_simulation(simulation_correct_cols)
+        to_concat.append(final_df)
+
+    return pd.concat(to_concat, axis=1)
