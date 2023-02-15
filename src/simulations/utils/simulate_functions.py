@@ -30,12 +30,10 @@ def simulate_winners(
             Each column is a different simulation.
     """
 
-    indexes = range(len(probabilities))
+    winner_possibilities = ["h", "d", "a"]
     simul_shape = (num_matches, num_simulations)
-    index_simulation = np.random.choice(indexes, p=probabilities, size=simul_shape)
 
-    points_simulations: np.ndarray = np.array(["h", "d", "a"])[index_simulation]
-    return points_simulations
+    return np.random.choice(winner_possibilities, p=probabilities, size=simul_shape)
 
 
 def simulate_points_per_match(
@@ -66,13 +64,13 @@ def simulate_points_per_match(
             Each column is a different simulation.
     """
 
+    # 'choice' doesn't work with 2d arrays, so we need to simulate 'indexes' instead
     indexes = range(len(probabilities))
     simul_shape = (num_matches, num_simulations)
     index_simulation = np.random.choice(indexes, p=probabilities, size=simul_shape)
 
-    points_simulations: np.ndarray = np.array([[3, 0], [1, 1], [0, 3]])[
-        index_simulation
-    ]
+    points_possibilities: np.ndarray = np.array([[3, 0], [1, 1], [0, 3]])
+    points_simulations: np.ndarray = points_possibilities[index_simulation]
 
     if points_simulations.size == 0:
         return np.array([])
