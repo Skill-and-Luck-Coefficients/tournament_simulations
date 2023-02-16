@@ -32,7 +32,8 @@ def _create_double_round_robin_from_single(
 
     return DoubleRoundRobin(
         single.num_teams,
-        [single, SingleRoundRobin(single.num_teams, second_rounds)],
+        single,
+        SingleRoundRobin(single.num_teams, second_rounds),
     )
 
 
