@@ -38,12 +38,14 @@ def batch_simulate_winners(
 
         id_to_probabilities: pd.Series["id", Probabilities]]
             Mapping from each tournament 'id' to the desired probabilities.
+            Index should be in the same order as simulation_index.
 
-            Probabilities are a tuple:
-                (prob home team win, prob draw, prob away team win)
+                Probabilities are a tuple:
+                    (prob home team win, prob draw, prob away team win)
 
         id_to_num_matches: pd.Series["id", int]
             Mapping from each tournament 'id' to its total number of matches.
+            Index should be in the same order as simulation_index.
 
         simulation_index: pd.Index | pd.MultiIndex
             Simulated dataframe will have its index set to this.
@@ -117,12 +119,14 @@ def batch_simulate_points_per_match(
 
         id_to_probabilities: pd.Series["id", Probabilities]]
             Mapping from each tournament 'id' to the desired probabilities.
+            Index should be in the same order as simulation_index.
 
-            Probabilities are a tuple:
-                (prob home team win, prob draw, prob away team win)
+                Probabilities are a tuple:
+                    (prob home team win, prob draw, prob away team win)
 
         id_to_num_matches: pd.Series["id", int]
             Mapping from each tournament 'id' to its total number of matches.
+            Index should be in the same order as simulation_index.
 
         simulation_index: pd.Index | pd.MultiIndex
             Simulated dataframe will have its index set to this.
