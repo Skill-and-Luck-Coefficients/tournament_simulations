@@ -23,6 +23,8 @@ class PointsPerMatch:
                 ]
             ]
 
+        Index is automatically sorted after initialization.
+
         Id is the tournament information: country, season, name and year.
 
             The reason there are two names (current_name and name) is because some
@@ -45,6 +47,9 @@ class PointsPerMatch:
     """
 
     df: pd.DataFrame
+
+    def __post_init__(self):
+        self.df = self.df.sort_index()
 
     @property
     def team_names_per_id(self) -> pd.Series:

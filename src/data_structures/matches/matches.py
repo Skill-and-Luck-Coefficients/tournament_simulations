@@ -40,7 +40,9 @@ class Matches:
             ]
         ]
 
-        Only "id", "date number", "home", "away", "winner" and "date" are required.
+        Only "id", "date number", "home", "away" and "winner" are required.
+
+        Index is automatically sorted after initialization.
 
         Id is the tournament information: country, season, name and year.
 
@@ -64,6 +66,28 @@ class Matches:
     """
 
     df: pd.DataFrame
+
+    def __post_init__(self):
+        self.df = self.df.sort_index()
+
+    @functools.cached_property
+    def team_names_per_id(self) -> pd.Series:
+        """
+        Gets a list of team names for each tournament separately.
+        """
+        # apply func
+        def _get_team_names_one_id(matches_one_id: pd.DataFrame) -> list[str]:
+
+            teams_home: set[str] = set(matches_one_id.loc[:, "home"])
+            teams_away: set[str] = set(matches_one_id.loc[:, "away"])
+
+            return sorted(teams_home | teams_away)
+
+        return (
+            self.df.groupby("id", observed=True)
+            .apply(_get_team_names_one_id)
+            .rename("teams")
+        )
 
     @functools.cached_property
     def number_of_matches_per_id(self) -> pd.Series:
