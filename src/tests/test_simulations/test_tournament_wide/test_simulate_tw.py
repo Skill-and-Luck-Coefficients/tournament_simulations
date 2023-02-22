@@ -85,9 +85,12 @@ def test_simulate_tournament_wide_template_first(
     ).set_index(["id", "date number"])
 
     joined_id_maps = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    id_to_prob__num_matches = pd.Series(
+        joined_id_maps.itertuples(index=False, name=None), index=joined_id_maps.index
+    )
 
     simulations = simul._simulate_tournament_wide_template(
-        apply_func, num_simulations, joined_id_maps, data_to_join_first.index
+        apply_func, num_simulations, id_to_prob__num_matches, data_to_join_first.index
     )
 
     assert simulations.equals(expected)
@@ -120,9 +123,12 @@ def test_simulate_tournament_wide_template_second(
     ).set_index(["id", "date number"])
 
     joined_id_maps = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    id_to_prob__num_matches = pd.Series(
+        joined_id_maps.itertuples(index=False, name=None), index=joined_id_maps.index
+    )
 
     simulations = simul._simulate_tournament_wide_template(
-        apply_func, num_simulations, joined_id_maps, data_to_join_second.index
+        apply_func, num_simulations, id_to_prob__num_matches, data_to_join_second.index
     )
 
     assert simulations.equals(expected)

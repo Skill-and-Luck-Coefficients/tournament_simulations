@@ -9,14 +9,14 @@ from ..utils.simulate_functions import simulate_points_per_match, simulate_winne
 
 
 def _simulate_tournament_wide_template(
-    apply_func: Callable[[Probabilities, int, int], np.ndarray],
+    apply_func: Callable[[tuple[Probabilities, int], int], np.ndarray],
     num_simulations: int,
     id_to_prob__num_matches: pd.Series,
     simulation_index: pd.Index | pd.MultiIndex,
 ) -> pd.DataFrame:
 
     simulations = id_to_prob__num_matches.apply(
-        apply_func, axis=1, num_simulations=num_simulations
+        apply_func, num_simulations=num_simulations
     )
 
     data_for_df = np.vstack(simulations)
@@ -32,17 +32,17 @@ def simulate_winners__tournament_wide(
 
     # apply function
     def _simulate_winners_one_id(
-        id_to_prob__num_matches: pd.DataFrame,
+        prob__num_matches: tuple[Probabilities, int],
         num_simulations: int,
-    ) -> pd.DataFrame:
+    ) -> np.ndarray:
 
-        probabilities, num_matches = id_to_prob__num_matches
+        probabilities, num_matches = prob__num_matches
         return simulate_winners(probabilities, num_simulations, num_matches)
 
-    id_to_prob__num_matches = pd.concat(
-        [id_to_probabilities, id_to_num_matches],
-        axis=1,
-        keys=["probabilities", "num matches"],
+    concatenated_series = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    id_to_prob__num_matches = pd.Series(
+        data=concatenated_series.itertuples(index=False, name=None),
+        index=concatenated_series.index,
     )
 
     return _simulate_tournament_wide_template(
@@ -62,17 +62,17 @@ def simulate_points_per_match__tournament_wide(
 
     # apply function
     def _simulate_points_per_match_one_id(
-        id_to_prob__num_matches: pd.DataFrame,
+        prob__num_matches: tuple[Probabilities, int],
         num_simulations: int,
-    ) -> pd.DataFrame:
+    ) -> np.ndarray:
 
-        probabilities, num_matches = id_to_prob__num_matches
+        probabilities, num_matches = prob__num_matches
         return simulate_points_per_match(probabilities, num_simulations, num_matches)
 
-    id_to_prob__num_matches = pd.concat(
-        [id_to_probabilities, id_to_num_matches],
-        axis=1,
-        keys=["probabilities", "num matches"],
+    concatenated_series = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    id_to_prob__num_matches = pd.Series(
+        data=concatenated_series.itertuples(index=False, name=None),
+        index=concatenated_series.index,
     )
 
     return _simulate_tournament_wide_template(
