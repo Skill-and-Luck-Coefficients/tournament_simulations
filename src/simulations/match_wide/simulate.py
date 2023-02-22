@@ -33,7 +33,7 @@ def simulate_winners__match_wide(
 
     # apply function
     def _simulate_winners_one_match_one_id(
-        probabilities: pd.Series,
+        probabilities: Probabilities,
         num_simulations: int,
     ) -> pd.DataFrame:
 
@@ -55,7 +55,7 @@ def simulate_points_per_match__match_wide(
 
     # apply function
     def _simulate_points_per_match_one_match_one_id(
-        probabilities: pd.Series,
+        probabilities: Probabilities,
         num_simulations: int,
     ) -> pd.DataFrame:
 
