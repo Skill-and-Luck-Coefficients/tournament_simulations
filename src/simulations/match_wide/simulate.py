@@ -35,7 +35,7 @@ def simulate_winners__match_wide(
     def _simulate_winners_one_match_one_id(
         probabilities: Probabilities,
         num_simulations: int,
-    ) -> pd.DataFrame:
+    ) -> np.ndarray:
 
         return simulate_winners(probabilities, num_simulations, num_matches=1)
 
@@ -57,7 +57,7 @@ def simulate_points_per_match__match_wide(
     def _simulate_points_per_match_one_match_one_id(
         probabilities: Probabilities,
         num_simulations: int,
-    ) -> pd.DataFrame:
+    ) -> np.ndarray:
 
         return simulate_points_per_match(probabilities, num_simulations, num_matches=1)
 
