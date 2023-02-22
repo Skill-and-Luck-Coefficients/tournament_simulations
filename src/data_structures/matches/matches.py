@@ -4,6 +4,8 @@ from typing import Literal, NewType
 
 import pandas as pd
 
+from utils.convert_df_to_series import convert_df_to_series_of_tuples
+
 Id = NewType("Id", str)
 DateNumber = NewType("DateNumber", int)
 MatchesDFIndex = tuple[Id, DateNumber]
@@ -147,15 +149,6 @@ class Matches:
         Creates a series containing tuples (home, away, winner) for all matches.
         """
 
-        home_away_winner_data = [
-            (home, away, winner)
-            for home, away, winner in zip(
-                self.df["home"],
-                self.df["away"],
-                self.df["winner"],
-            )
-        ]
+        desired_cols = self.df[["home", "away", "winner"]]
 
-        return pd.Series(
-            data=home_away_winner_data, index=self.df.index, name="home away winner"
-        )
+        return convert_df_to_series_of_tuples(desired_cols).rename("home away winner")
