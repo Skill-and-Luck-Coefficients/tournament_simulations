@@ -61,8 +61,11 @@ def get_kwargs_from_home_away_winner(
 
     ------
     Returns:
-        DataFrame for PointsPerMatch
+        Kwargs parameters for PointsPerMatch
             Points each team made in each match they played.
+
+            Parameters:
+                df -> pd.DataFrame
     """
 
     points_per_match = _get_teams_points_per_match(home_away_winner)
