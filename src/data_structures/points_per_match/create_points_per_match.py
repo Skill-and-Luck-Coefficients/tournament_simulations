@@ -47,7 +47,7 @@ def create_points_per_match_from_home_away_winner(
 ) -> PointsPerMatch:
 
     """
-    Given a data frame with all matches, converts each match
+    Given a pd.Series with all matches, converts each match
     into two lines containing the teams (home and away) names
     and their points.
 
