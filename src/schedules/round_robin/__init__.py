@@ -14,16 +14,14 @@ Module responsible for creating schedules for round-robin tournaments.
 """
 
 from .convert_rounds_to_dataframe import convert_list_of_rounds_to_dataframe
-from .create_double_round_robin import create_double_round_robin_from_num_teams
-from .create_single_round_robin import create_single_round_robin_from_num_teams
 from .double_round_robin import DoubleRoundRobin
-from .single_round_robin import Round, SingleRoundRobin
+from .single_round_robin import SingleRoundRobin
+from .types import Match, Round
 
 __all__ = [
     "convert_list_of_rounds_to_dataframe",
-    "create_double_round_robin_from_num_teams",
-    "create_single_round_robin_from_num_teams",
     "DoubleRoundRobin",
-    "Round",
     "SingleRoundRobin",
+    "Match",
+    "Round",
 ]

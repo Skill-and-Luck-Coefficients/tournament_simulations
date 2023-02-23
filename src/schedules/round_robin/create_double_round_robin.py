@@ -3,9 +3,9 @@ import random
 
 from logs import log
 
-from .create_single_round_robin import create_single_round_robin_from_num_teams
-from .double_round_robin import DoubleRoundRobin
 from .single_round_robin import Round, SingleRoundRobin
+
+KwargsDRR = dict[str, int | SingleRoundRobin]
 
 
 def _create_rounds_second_portion(rounds: list[Round]) -> list[Round]:
@@ -24,21 +24,21 @@ def _create_rounds_second_portion(rounds: list[Round]) -> list[Round]:
 
 def _create_double_round_robin_from_single(
     single: SingleRoundRobin,
-) -> DoubleRoundRobin:
+) -> KwargsDRR:
 
     first_rounds: list[Round] = random.sample(single.schedule, k=len(single.schedule))
 
     second_rounds = _create_rounds_second_portion(first_rounds)
 
-    return DoubleRoundRobin(
-        single.num_teams,
-        single,
-        SingleRoundRobin(single.num_teams, second_rounds),
-    )
+    return {
+        "num_teams": single.num_teams,
+        "first_single_round_robin": single,
+        "second_single_round_robin": SingleRoundRobin(single.num_teams, second_rounds),
+    }
 
 
 @log(logging.info)
-def create_double_round_robin_from_num_teams(num_teams: int) -> DoubleRoundRobin:
+def get_kwargs_from_num_teams(num_teams: int) -> KwargsDRR:
 
     """
     Create a double round-robin schedule for a tournament with num_teams teams.
@@ -61,6 +61,6 @@ def create_double_round_robin_from_num_teams(num_teams: int) -> DoubleRoundRobin
 
     """
 
-    single = create_single_round_robin_from_num_teams(num_teams)
+    single = SingleRoundRobin.from_num_teams(num_teams)
 
     return _create_double_round_robin_from_single(single)

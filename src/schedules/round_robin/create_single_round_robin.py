@@ -3,7 +3,9 @@ import random
 
 from logs import log
 
-from .single_round_robin import Round, SingleRoundRobin
+from .types import Round
+
+KwargsSRR = dict[str, int | list[Round]]
 
 
 def _create_team_list(num_teams: int) -> list[int]:
@@ -61,7 +63,9 @@ def _shuffle_home_away_in_matches(schedule: list[Round]) -> list[Round]:
 
 
 @log(logging.info)
-def create_single_round_robin_from_num_teams(num_teams: int) -> SingleRoundRobin:
+def get_kwargs_from_num_teams(
+    num_teams: int,
+) -> KwargsSRR:
 
     """
     Create a single round-robin schedule for a tournament with num_teams teams.
@@ -86,4 +90,4 @@ def create_single_round_robin_from_num_teams(num_teams: int) -> SingleRoundRobin
     schedule = _generate_schedule(teams)
     shuffled_schedule = _shuffle_home_away_in_matches(schedule)
 
-    return SingleRoundRobin(num_teams, shuffled_schedule)
+    return {"num_teams": num_teams, "schedule": shuffled_schedule}

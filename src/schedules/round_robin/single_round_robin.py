@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import random
 from dataclasses import dataclass
 
-Match = tuple[int, int]  # each team is an integer
-Round = tuple[Match, ...]
+from .create_single_round_robin import get_kwargs_from_num_teams
+from .types import Round
 
 
 @dataclass
@@ -29,6 +31,12 @@ class SingleRoundRobin:
 
     num_teams: int
     schedule: list[Round]
+
+    @classmethod
+    def from_num_teams(cls, num_teams: int) -> SingleRoundRobin:
+
+        parameters = get_kwargs_from_num_teams(num_teams)
+        return cls(**parameters)
 
     def get_full_schedule(self, num_schedules: int) -> list[Round]:
 

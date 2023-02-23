@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import random
 from dataclasses import dataclass
 
-from .single_round_robin import Round, SingleRoundRobin
+from .create_double_round_robin import get_kwargs_from_num_teams
+from .single_round_robin import SingleRoundRobin
+from .types import Round
 
 
 @dataclass
@@ -30,6 +34,12 @@ class DoubleRoundRobin:
     num_teams: int
     first_single_round_robin: SingleRoundRobin
     second_single_round_robin: SingleRoundRobin
+
+    @classmethod
+    def from_num_teams(cls, num_teams: int) -> DoubleRoundRobin:
+
+        parameters = get_kwargs_from_num_teams(num_teams)
+        return cls(**parameters)
 
     def get_full_schedule(self, num_schedules: int) -> list[Round]:
 
