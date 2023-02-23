@@ -6,8 +6,6 @@ import pandas as pd
 import data_structures.matches as mat
 from logs import log
 
-from .points_per_match import PointsPerMatch
-
 TeamPontuation = tuple[mat.Team, int]
 TeamsMatchPoints = tuple[TeamPontuation, TeamPontuation]
 
@@ -42,9 +40,9 @@ def _get_teams_points_per_match(home_away_winner: pd.Series) -> pd.Series:
 
 
 @log(logging.debug)
-def create_points_per_match_from_home_away_winner(
+def get_parameters_from_home_away_winner(
     home_away_winner: pd.Series,
-) -> PointsPerMatch:
+) -> pd.DataFrame:
 
     """
     Given a pd.Series with all matches, converts each match
@@ -55,12 +53,13 @@ def create_points_per_match_from_home_away_winner(
 
     --------
     Parameters:
-        home_away_winner: pd.Series["match", tuple[str, str, str]]
-            (home, away, winner) tuples for all matches.
+        home_away_winner: pd.Series["desired_index", tuple[str, str, str]]
+            Index -> home_away_winner index will be used for retuned df.
+            Data -> (home, away, winner) tuples for all matches.
 
     ------
     Returns:
-        PointsPerMatch
+        DataFrame for PointsPerMatch
             Points each team made in each match they played.
     """
 
@@ -72,4 +71,4 @@ def create_points_per_match_from_home_away_winner(
     df_data: list[TeamPontuation] = points_per_match.to_list()
 
     ppm_df = pd.DataFrame(df_data, df_index, df_columns)
-    return PointsPerMatch(ppm_df.astype({"team": "category", "points": np.int16}))
+    return {"df": ppm_df.astype({"team": "category", "points": np.int16})}

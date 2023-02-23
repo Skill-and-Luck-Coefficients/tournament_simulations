@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import functools
 from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
+
+from .create_points_per_match import get_parameters_from_home_away_winner
 
 
 @dataclass
@@ -50,6 +54,30 @@ class PointsPerMatch:
 
     def __post_init__(self):
         self.df = self.df.sort_index()
+
+    @classmethod
+    def from_home_away_winner(cls, home_away_winner: pd.Series) -> PointsPerMatch:
+
+        """
+        Given a pd.Series with all matches, converts each match
+        into two lines containing the teams (home and away) names
+        and their points.
+
+        Matches which cannot be converted will be ignored.
+
+        --------
+        Parameters:
+            home_away_winner: pd.Series["desired_index", tuple[str, str, str]]
+                Index -> home_away_winner index will be used for retuned df.
+                (home, away, winner) tuples for all matches.
+
+        ------
+        Returns:
+            PointsPerMatch
+                Points each team made in each match they played.
+        """
+        kwargs = get_parameters_from_home_away_winner(home_away_winner)
+        return cls(**kwargs)
 
     @property
     def team_names_per_id(self) -> pd.Series:

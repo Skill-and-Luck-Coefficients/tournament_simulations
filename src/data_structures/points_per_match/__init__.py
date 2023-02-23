@@ -39,10 +39,6 @@
 
             All other information is pretty self-explanatory.
 """
-from .create_points_per_match import create_points_per_match_from_home_away_winner
 from .points_per_match import PointsPerMatch
 
-__all__ = [
-    "create_points_per_match_from_home_away_winner",
-    "PointsPerMatch",
-]
+__all__ = ["PointsPerMatch"]
