@@ -52,7 +52,7 @@ def test_create_points_per_match_first():
     }
     expected = pd.DataFrame(expected_cols).set_index(["id", "date number"])
 
-    ppm = cppm.get_parameters_from_home_away_winner(test)["df"]
+    ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
     assert ppm.equals(expected.astype({"team": "category", "points": np.int16}))
 
 
@@ -98,5 +98,5 @@ def test_create_points_per_match_second():
     }
     expected = pd.DataFrame(expected_cols).set_index(["id", "date number"])
 
-    ppm = cppm.get_parameters_from_home_away_winner(test)["df"]
+    ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
     assert ppm.equals(expected.astype({"team": "category", "points": np.int16}))

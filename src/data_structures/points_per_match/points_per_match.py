@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from .create_points_per_match import get_parameters_from_home_away_winner
+from .create_points_per_match import get_kwargs_from_home_away_winner
 
 
 @dataclass
@@ -76,7 +76,7 @@ class PointsPerMatch:
             PointsPerMatch
                 Points each team made in each match they played.
         """
-        kwargs = get_parameters_from_home_away_winner(home_away_winner)
+        kwargs = get_kwargs_from_home_away_winner(home_away_winner)
         return cls(**kwargs)
 
     @property

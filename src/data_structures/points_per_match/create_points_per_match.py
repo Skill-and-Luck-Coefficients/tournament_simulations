@@ -9,6 +9,8 @@ from logs import log
 TeamPontuation = tuple[mat.Team, int]
 TeamsMatchPoints = tuple[TeamPontuation, TeamPontuation]
 
+KwargsPPM = dict[str, pd.DataFrame]
+
 
 def _get_teams_points_per_match(home_away_winner: pd.Series) -> pd.Series:
 
@@ -40,9 +42,9 @@ def _get_teams_points_per_match(home_away_winner: pd.Series) -> pd.Series:
 
 
 @log(logging.debug)
-def get_parameters_from_home_away_winner(
+def get_kwargs_from_home_away_winner(
     home_away_winner: pd.Series,
-) -> pd.DataFrame:
+) -> KwargsPPM:
 
     """
     Given a pd.Series with all matches, converts each match
