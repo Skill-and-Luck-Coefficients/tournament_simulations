@@ -11,6 +11,6 @@ For specific information about a data structure, read its respective
 
 from . import matches as mat
 from . import points_per_match as ppm
-from . import types
+from . import utils
 
-__all__ = ["mat", "ppm", "types"]
+__all__ = ["mat", "ppm", "utils"]

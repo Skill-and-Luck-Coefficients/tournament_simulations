@@ -4,7 +4,7 @@ import random
 from dataclasses import dataclass
 
 from .create_single_round_robin import get_kwargs_from_num_teams
-from .types import Round
+from .utils.types import Round
 
 
 @dataclass

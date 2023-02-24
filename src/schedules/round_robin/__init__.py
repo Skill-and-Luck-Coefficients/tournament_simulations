@@ -16,12 +16,9 @@ Module responsible for creating schedules for round-robin tournaments.
 from . import utils
 from .double_round_robin import DoubleRoundRobin
 from .single_round_robin import SingleRoundRobin
-from .types import Match, Round
 
 __all__ = [
     "utils",
     "DoubleRoundRobin",
     "SingleRoundRobin",
-    "Match",
-    "Round",
 ]

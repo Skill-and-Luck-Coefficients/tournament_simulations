@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from .create_double_round_robin import get_kwargs_from_num_teams
 from .single_round_robin import SingleRoundRobin
-from .types import Round
+from .utils.types import Round
 
 
 @dataclass

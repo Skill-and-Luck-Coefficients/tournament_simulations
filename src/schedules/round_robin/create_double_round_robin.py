@@ -3,7 +3,8 @@ import random
 
 from logs import log
 
-from .single_round_robin import Round, SingleRoundRobin
+from .single_round_robin import SingleRoundRobin
+from .utils.types import Round
 
 KwargsDRR = dict[str, int | SingleRoundRobin]
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from data_structures.types import Probabilities
+from data_structures.utils.types import Probabilities
 
 
 def simulate_winners(

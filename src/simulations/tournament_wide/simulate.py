@@ -3,7 +3,7 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from data_structures.types import Probabilities
+from data_structures.utils.types import Probabilities
 from utils.convert_df_to_series import convert_df_to_series_of_tuples
 
 from ..utils.simulate_functions import simulate_points_per_match, simulate_winners

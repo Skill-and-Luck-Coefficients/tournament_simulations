@@ -3,7 +3,7 @@ import random
 
 from logs import log
 
-from .types import Round
+from .utils.types import Round
 
 KwargsSRR = dict[str, int | list[Round]]
 

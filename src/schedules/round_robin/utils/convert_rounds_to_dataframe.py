@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ..types import Round
+from .types import Round
 
 
 def convert_list_of_rounds_to_dataframe(
