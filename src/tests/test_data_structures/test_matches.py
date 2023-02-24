@@ -122,7 +122,7 @@ def test_home_vs_away_count_per_id_first_matches(first_matches: ds.mat.Matches):
             names=["id", "home", "away"],
         ),
         data=[1, 2, 1],
-    )
+    ).rename("match count")
 
     assert first_matches.home_vs_away_count_per_id.equals(expected)
 
@@ -139,6 +139,6 @@ def test_home_vs_away_count_per_id_second_matches(second_matches: ds.mat.Matches
             names=["id", "home", "away"],
         ),
         data=[1, 1, 1, 1, 1],
-    )
+    ).rename("match count")
 
     assert second_matches.home_vs_away_count_per_id.equals(expected)
