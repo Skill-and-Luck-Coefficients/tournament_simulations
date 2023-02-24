@@ -72,8 +72,9 @@ def get_kwargs_from_matches(matches: Matches) -> KwargsMD:
     ------
     Returns:
 
-        Kwargs parameters to create MatchesDates
-            List with all date number two teams faced each other per tournament.
+        Kwargs parameters to intiialize MatchesDates
+            "series" -> pd.Series
+                list with all date number two teams faced each other per tournament.
     """
 
     date_numbers_per_match = _get_date_numbers_per_match(matches)
