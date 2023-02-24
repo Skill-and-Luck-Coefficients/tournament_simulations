@@ -152,3 +152,16 @@ class Matches:
         desired_cols = self.df[["home", "away", "winner"]]
 
         return convert_df_to_series_of_tuples(desired_cols).rename("home away winner")
+
+    @functools.cached_property
+    def home_vs_away_count_per_id(self) -> pd.Series:
+
+        """
+        How many times (home, away) faced each other for all pairs
+        of teams for a tournament.
+
+        If there are no matches between two teams in a tournament,
+        it will be omitted.
+        """
+
+        return self.df.groupby(["id", "home", "away"]).apply(len)
