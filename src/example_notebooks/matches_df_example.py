@@ -15,7 +15,7 @@ _df_data_mw = {
         "T/2",
         "T/2",
     ],
-    "date_number": [
+    "date number": [
         0,
         1,
         0,
@@ -90,7 +90,7 @@ _df_data_mw = {
 matches_df_mw = (
     pd.DataFrame(_df_data_mw)
     .astype({"id": "category"})
-    .set_index(["id", "date_number"])
+    .set_index(["id", "date number"])
 )
 
 _df_data_tw = {
@@ -108,7 +108,7 @@ _df_data_tw = {
         "uniform_prob",
         "uniform_prob",
     ],
-    "date_number": [
+    "date number": [
         0,
         1,
         0,
@@ -169,5 +169,5 @@ _df_data_tw = {
 matches_df_tw = (
     pd.DataFrame(_df_data_tw)
     .astype({"id": "category"})
-    .set_index(["id", "date_number"])
+    .set_index(["id", "date number"])
 )
