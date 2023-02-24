@@ -164,4 +164,8 @@ class Matches:
         it will be omitted.
         """
 
-        return self.df.groupby(["id", "home", "away"]).apply(len).rename("match count")
+        return (
+            self.df.groupby(["id", "home", "away"], observed=True)
+            .apply(len)
+            .rename("match count")
+        )
