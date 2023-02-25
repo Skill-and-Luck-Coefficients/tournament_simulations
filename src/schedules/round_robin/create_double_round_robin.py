@@ -28,13 +28,12 @@ def _create_double_round_robin_from_single(
 ) -> KwargsDRR:
 
     first_rounds: list[Round] = random.sample(single.schedule, k=len(single.schedule))
-
     second_rounds = _create_rounds_second_portion(first_rounds)
 
     return {
         "num_teams": single.num_teams,
-        "first_single_round_robin": single,
-        "second_single_round_robin": SingleRoundRobin(single.num_teams, second_rounds),
+        "first_schedule": first_rounds,
+        "second_schedule": second_rounds,
     }
 
 

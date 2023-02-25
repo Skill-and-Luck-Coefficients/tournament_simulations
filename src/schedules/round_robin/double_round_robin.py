@@ -23,8 +23,8 @@ class DoubleRoundRobin:
         num_teams: int
             Number of teams in the round-robin tournament
 
-        <first,second>_single_round_robin: list[SingleRoundRobin]
-            Two SingleRoundRobin.
+        <first,second>_schedule: list[Round]
+            Two single round-robin schedules.
 
             Teams should face each other twice, once in the first (home vs away)
             and once in the second (away vs home).
@@ -32,8 +32,8 @@ class DoubleRoundRobin:
     """
 
     num_teams: int
-    first_single_round_robin: SingleRoundRobin
-    second_single_round_robin: SingleRoundRobin
+    first_schedule: list[Round]
+    second_schedule: list[Round]
 
     @classmethod
     def from_num_teams(cls, num_teams: int) -> DoubleRoundRobin:
@@ -75,11 +75,11 @@ class DoubleRoundRobin:
 
         for _ in range(num_schedules):
 
-            first_schedule_copy = self.first_single_round_robin.schedule.copy()
+            first_schedule_copy = self.first_schedule.copy()
             random.shuffle(first_schedule_copy)
             rounds.extend(first_schedule_copy)
 
-            second_schedule_copy = self.second_single_round_robin.schedule.copy()
+            second_schedule_copy = self.second_schedule.copy()
             random.shuffle(second_schedule_copy)
             rounds.extend(second_schedule_copy)
 
