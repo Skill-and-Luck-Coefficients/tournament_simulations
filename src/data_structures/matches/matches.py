@@ -167,5 +167,6 @@ class Matches:
         return (
             self.df.groupby(["id", "home", "away"], observed=True)
             .apply(len)
+            .sort_index()  # BUG: it is not sorting after groupby
             .rename("match count")
         )
