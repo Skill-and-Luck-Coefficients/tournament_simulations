@@ -1,9 +1,11 @@
 import logging
 import random
+from typing import Iterable
 
 from logs import log
 
-from .utils.types import Round
+from .utils.rename_teams import rename_teams_in_rounds
+from .utils.types import Round, Team
 
 KwargsSRR = dict[str, int | list[Round]]
 
@@ -79,10 +81,9 @@ def get_kwargs_from_num_teams(
     ------
     Returns:
 
-        SingleRoundRobin:
-            Schedule for a single round-robin tournament where each team
-            is represented by an integer.
-
+        Kwargs parameters for SingleRoundRobin:
+            "num_teams": number of teams
+            "schedule": schedule for a single round-robin tournament.
     """
 
     teams = _create_team_list(num_teams)
@@ -91,3 +92,37 @@ def get_kwargs_from_num_teams(
     shuffled_schedule = _shuffle_home_away_in_matches(schedule)
 
     return {"num_teams": num_teams, "schedule": shuffled_schedule}
+
+
+@log(logging.info)
+def get_kwargs_from_team_names(
+    team_names: Iterable[Team],
+) -> KwargsSRR:
+
+    """
+    Create a single round-robin schedule for a tournament with num_teams teams.
+
+    -----
+    Parameters:
+
+        team_names: list[Team]
+            Team names.
+                i-th team is represented by team_names[i].
+
+    ------
+    Returns:
+
+        Kwargs parameters for SingleRoundRobin:
+            "num_teams": number of teams
+            "schedule": schedule for a single round-robin tournament.
+    """
+
+    params_teams_as_int = get_kwargs_from_num_teams(len(team_names))
+
+    schedule = params_teams_as_int["schedule"]
+    schedule_generator = rename_teams_in_rounds(schedule, team_names)
+
+    return {
+        "num_teams": params_teams_as_int["num_teams"],
+        "schedule": list(schedule_generator),
+    }

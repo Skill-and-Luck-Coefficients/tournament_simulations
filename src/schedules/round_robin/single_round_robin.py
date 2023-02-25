@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
+from typing import Iterable, Iterator
 
-from .create_single_round_robin import get_kwargs_from_num_teams
-from .utils.types import Round
+from . import create_single_round_robin as create
+from .utils.types import Round, Team
 
 
 @dataclass
@@ -14,19 +15,17 @@ class SingleRoundRobin:
     Dataclass which saves the matches for a single round-robin
     tournament.
 
-    Each match is represented by two integers in
-    the interval [0, num_teams), that is, the index position for
-    a list with team names.
-
     ----
     Parameters:
 
         num_teams: int
             Number of teams in the round-robin tournament
 
-        schedule: list[tuple[tuple[int, int], ...]
-            Single round-robin schedule in which rounds are
-            tuple[match, ...] and each match is a tuple[int, int].
+        schedule: list[tuple[tuple[Team, Team], ...]
+            Single round-robin schedule in which:
+                - Rounds are tuple[Match, ...]
+                - Match is a tuple[Team, Team]
+                - Team can be int, str or something else.
     """
 
     num_teams: int
@@ -35,7 +34,23 @@ class SingleRoundRobin:
     @classmethod
     def from_num_teams(cls, num_teams: int) -> SingleRoundRobin:
 
-        parameters = get_kwargs_from_num_teams(num_teams)
+        """
+        In this case, teams will be integers.
+
+        You can think of it as the the index position for
+        a list with team names.
+        """
+        parameters = create.get_kwargs_from_num_teams(num_teams)
+        return cls(**parameters)
+
+    @classmethod
+    def from_team_names(cls, team_names: Iterable[Team]) -> SingleRoundRobin:
+
+        """
+        In this case, a team will be whatever was passed as its name.
+            i-th team will be represented by team_names[i]
+        """
+        parameters = create.get_kwargs_from_team_names(team_names)
         return cls(**parameters)
 
     def get_full_schedule(self, num_schedules: int) -> Iterator[Round]:

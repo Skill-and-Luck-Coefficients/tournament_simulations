@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
+from typing import Iterable, Iterator
 
-from .create_double_round_robin import get_kwargs_from_num_teams
-from .single_round_robin import SingleRoundRobin
-from .utils.types import Round
+from . import create_double_round_robin as create
+from .utils.types import Round, Team
 
 
 @dataclass
@@ -13,9 +13,7 @@ class DoubleRoundRobin:
 
     """
     Dataclass which saves the matches for a double round-robin
-    tournament. Each match is represented by two integers in
-    the interval [0, num_teams), that is, the index position for
-    a list with team names.
+    tournament.
 
     ----
     Parameters:
@@ -38,7 +36,23 @@ class DoubleRoundRobin:
     @classmethod
     def from_num_teams(cls, num_teams: int) -> DoubleRoundRobin:
 
-        parameters = get_kwargs_from_num_teams(num_teams)
+        """
+        In this case, teams will be integers.
+
+        You can think of it as the the index position for
+        a list with team names.
+        """
+        parameters = create.get_kwargs_from_num_teams(num_teams)
+        return cls(**parameters)
+
+    @classmethod
+    def from_team_names(cls, team_names: Iterable[Team]) -> DoubleRoundRobin:
+
+        """
+        In this case, a team will be whatever was passed as its name.
+            i-th team will be represented by team_names[i]
+        """
+        parameters = create.get_kwargs_from_team_names(team_names)
         return cls(**parameters)
 
     def get_full_schedule(self, num_schedules: int) -> Iterator[Round]:
