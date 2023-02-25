@@ -38,13 +38,13 @@ class SingleRoundRobin:
         parameters = get_kwargs_from_num_teams(num_teams)
         return cls(**parameters)
 
-    def get_full_schedule(self, num_schedules: int) -> list[Round]:
+    def get_full_schedule(self, num_schedules: int) -> Iterator[Round]:
 
         """
         Concatenate num_schedules single-round-robin schedules together.
-
         Each additional round-robin schedule has its rounds shuffled.
 
+        It returns a generator for the concatenation.
         ----
         Example:
             -> Suppose that we have a RoundRobinSchedule with:
@@ -53,7 +53,7 @@ class SingleRoundRobin:
                     ( ((1,2), (3,0)), ((1,0), (2,3)), ((2,0), (1,3)) ),
                 ]
 
-            -> Then full_schedule(num_schedules = 2) can produce something like:
+            -> Then list(full_schedule(num_schedules = 2)) can produce something like:
 
                 [
                                                 # first single round-robin\n
@@ -65,12 +65,8 @@ class SingleRoundRobin:
             -> Notice that the 1st single-round-robin rounds were shuffled,
             as were the 2nd's.
         """
-        rounds: list[Round] = []
-
         for _ in range(num_schedules):
             schedule_copy = self.schedule.copy()
             random.shuffle(schedule_copy)
 
-            rounds.extend(schedule_copy)
-
-        return rounds
+            yield from schedule_copy
