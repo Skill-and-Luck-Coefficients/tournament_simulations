@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 import data_structures as ds
@@ -50,10 +49,14 @@ def test_create_points_per_match_first():
         "team": ["A", "C", "B", "C", "a", "d", "a", "b", "a", "b"],
         "points": [1, 1, 0, 3, 3, 0, 3, 0, 1, 1],
     }
-    expected = pd.DataFrame(expected_cols).set_index(["id", "date number"])
+    expected = (
+        pd.DataFrame(expected_cols)
+        .astype({"id": "category"})
+        .set_index(["id", "date number"])
+    )
 
     ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
-    assert ppm.equals(expected.astype({"team": "category", "points": np.int16}))
+    assert ppm.equals(expected)
 
 
 def test_create_points_per_match_second():
@@ -96,7 +99,11 @@ def test_create_points_per_match_second():
         "team": ["A", "C", "d", "b", "a", "d", "one", "two", "one", "two"],
         "points": [3, 0, 1, 1, 1, 1, 0, 3, 1, 1],
     }
-    expected = pd.DataFrame(expected_cols).set_index(["id", "date number"])
+    expected = (
+        pd.DataFrame(expected_cols)
+        .astype({"id": "category"})
+        .set_index(["id", "date number"])
+    )
 
     ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
-    assert ppm.equals(expected.astype({"team": "category", "points": np.int16}))
+    assert ppm.equals(expected)

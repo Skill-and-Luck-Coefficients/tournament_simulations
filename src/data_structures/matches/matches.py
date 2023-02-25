@@ -21,56 +21,73 @@ class Matches:
     """
     Dataclass responsible to store tournament matches.
 
-    df:
-        pd.DataFrame[
-            index=[
-                "id" -> "{current_name}@/{sport}/{country}/{name-year}/",\n
-                "date number" -> int (explained below),
-            ],\n
-            columns=[
-                "home"                -> str (home team name),\n
-                "away"                -> str (away team name),\n
-                "result"              -> "{home score}:{away score}",\n
-                "winner"              -> Literal["h", "d", "a"]
-                    "h" -> home\n
-                    "d" -> draw\n
-                    "a" -> away
-                "date"                -> "{day}.{month}.{year}",\n
-                "odds home"           -> np.float16,\n
-                "odds tie (optional)" -> np.float16,\n
-                "odds away"           -> np.float16,\n
+        df:
+            pd.DataFrame[
+                index=[
+                    "id" -> pd.Categorical[str]
+                        "{current_name}@/{sport}/{country}/{name-year}/",,\n
+                    "date number" -> int (explained below),
+                ],\n
+                columns=[
+                    "home"                -> pd.Categorical[str] (home team name),\n
+                    "away"                -> pd.Categorical[str] (away team name),\n
+                    "result"              -> "{home score}:{away score}",\n
+                    "winner"              -> pd.Categorical[Literal["h", "d", "a"]]
+                        "h" -> home\n
+                        "d" -> draw\n
+                        "a" -> away
+                    "date"                -> "{day}.{month}.{year}",\n
+                    "odds home"           -> np.float16,\n
+                    "odds tie (optional)" -> np.float16,\n
+                    "odds away"           -> np.float16,\n
+                ]
             ]
-        ]
 
-        Only "id", "date number", "home", "away" and "winner" are required.
+            Only "id", "date number", "home", "away" and "winner" are required.
 
-        Index is automatically sorted after initialization.
+            Index is automatically sorted after initialization.
 
-        Id is the tournament information: country, season, name and year.
+            Id is the tournament information: country, season, name and year.
 
-            The reason there are two names (current_name and name) is because some
-            tournaments have changed their names throughout the years.
+                The reason there are two names (current_name and name) is because some
+                tournaments have changed their names throughout the years.
 
-            The second part, that is, /{sport}/{country}/{name-year}, is the
-            hyperlink path to https://www.betexplorer.com/.
+                The second part, that is, /{sport}/{country}/{name-year}, is the
+                hyperlink path to https://www.betexplorer.com/.
 
 
-        Date number is a conversion from "date" to integers. The first date with
-        tournament matches has date number 0 (zero); the second date has date number
-        1; so on and so forth.
+            Date number is a conversion from "date" to integers. The first date with
+            tournament matches has date number 0 (zero); the second date has date number
+            1; so on and so forth.
 
-            Example:
-                match_dates = [
-                    "02.01.2014", "02.01.2014", "02.04.2014",
-                    "02.04.2014", "02.01.2015"
-                ]\n
-                match_date_numbers = [0, 0, 1, 1, 2]
+                Example:
+                    match_dates = [
+                        "02.01.2014", "02.01.2014", "02.04.2014",
+                        "02.04.2014", "02.01.2015"
+                    ]\n
+                    match_date_numbers = [0, 0, 1, 1, 2]
     """
 
     df: pd.DataFrame
 
     def __post_init__(self):
-        self.df = self.df.sort_index()
+
+        index_cols = ["id", "date number"]
+
+        # setting index_col as columns if they are in index
+        # this is needed for data_type conversion
+        index_to_reset = [name for name in index_cols if name in self.df.index.names]
+        self.df = self.df.reset_index(index_to_reset)
+
+        data_types: dict[str, type[int] | str] = {
+            "id": "category",
+            "date number": int,
+            "home": "category",
+            "away": "category",
+            "winner": "category",
+        }
+
+        self.df = self.df.astype(data_types).set_index(index_cols).sort_index()
 
     @functools.cached_property
     def team_names_per_id(self) -> pd.Series:

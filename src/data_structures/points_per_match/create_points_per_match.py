@@ -75,5 +75,4 @@ def get_kwargs_from_home_away_winner(
     df_index: pd.MultiIndex = points_per_match.index
     df_data: list[TeamPontuation] = points_per_match.to_list()
 
-    ppm_df = pd.DataFrame(df_data, df_index, df_columns)
-    return {"df": ppm_df.astype({"team": "category", "points": np.int16})}
+    return {"df": pd.DataFrame(df_data, df_index, df_columns)}

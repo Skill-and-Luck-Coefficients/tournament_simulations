@@ -18,11 +18,12 @@ class PointsPerMatch:
         df:
             pd.DataFrame[
                 index=[
-                    "id" -> "{current_name}@/{sport}/{country}/{name-year}/",\n
+                    "id" -> pd.Categorical[str]
+                        "{current_name}@/{sport}/{country}/{name-year}/",
                     "date number" -> int (explained below),
                 ],\n
                 columns=[
-                    "team"   -> str (team name),\n
+                    "team"   -> pd.Categorical[str] (team name),\n
                     "points" -> np.int16 (points team gained in date-number match),
                 ]
             ]
@@ -53,7 +54,22 @@ class PointsPerMatch:
     df: pd.DataFrame
 
     def __post_init__(self):
-        self.df = self.df.sort_index()
+
+        index_cols = ["id", "date number"]
+
+        # setting index_col as columns if they are in index
+        # this is needed for data_type conversion
+        index_to_reset = [name for name in index_cols if name in self.df.index.names]
+        self.df = self.df.reset_index(index_to_reset)
+
+        data_types: dict[str, type[int] | str] = {
+            "id": "category",
+            "date number": int,
+            "team": "category",
+            "points": np.int16,
+        }
+
+        self.df = self.df.astype(data_types).set_index(index_cols).sort_index()
 
     @classmethod
     def from_home_away_winner(cls, home_away_winner: pd.Series) -> PointsPerMatch:

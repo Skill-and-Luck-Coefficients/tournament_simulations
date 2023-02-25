@@ -117,9 +117,14 @@ def test_home_away_winner_second_matches(second_matches: ds.mat.Matches):
 def test_home_vs_away_count_per_id_first_matches(first_matches: ds.mat.Matches):
 
     expected = pd.Series(
-        index=pd.MultiIndex.from_arrays(
-            [["1", "2", "2"], ["one", "A", "C"], ["four", "B", "D"]],
-            names=["id", "home", "away"],
+        index=pd.MultiIndex.from_frame(
+            pd.DataFrame(
+                {
+                    "id": ["1", "2", "2"],
+                    "home": ["one", "A", "C"],
+                    "away": ["four", "B", "D"],
+                }
+            ).astype("category")
         ),
         data=[1, 2, 1],
     ).rename("match count")
@@ -130,13 +135,14 @@ def test_home_vs_away_count_per_id_first_matches(first_matches: ds.mat.Matches):
 def test_home_vs_away_count_per_id_second_matches(second_matches: ds.mat.Matches):
 
     expected = pd.Series(
-        index=pd.MultiIndex.from_arrays(
-            [
-                ["1", "1", "2", "2", "2"],
-                ["one", "three", "A", "B", "C"],
-                ["two", "four", "B", "A", "A"],
-            ],
-            names=["id", "home", "away"],
+        index=pd.MultiIndex.from_frame(
+            pd.DataFrame(
+                {
+                    "id": ["1", "1", "2", "2", "2"],
+                    "home": ["one", "three", "A", "B", "C"],
+                    "away": ["two", "four", "B", "A", "A"],
+                }
+            ).astype("category")
         ),
         data=[1, 1, 1, 1, 1],
     ).rename("match count")
