@@ -1,6 +1,9 @@
+import logging
+
 import pandas as pd
 
 from data_structures.matches import Matches
+from logs import log
 
 KwargsMD = dict[str, pd.DataFrame]
 
@@ -55,6 +58,7 @@ def _fill_date_numbers_per_match_per_id(
     return date_numbers_per_match + padding_negative_ones
 
 
+@log(logging.debug)
 def get_kwargs_from_matches(matches: Matches) -> KwargsMD:
 
     """
