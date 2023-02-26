@@ -18,13 +18,14 @@ def test_get_date_numbers_per_match():
     )
 
     expected = pd.Series(
-        index=pd.MultiIndex.from_arrays(
-            [
-                ["1", "1", "2", "3", "3"],
-                ["a", "b", "two", "A", "C"],
-                ["b", "c", "one", "C", "B"],
-            ],
-            names=["id", "home", "away"],
+        index=pd.MultiIndex.from_frame(
+            pd.DataFrame(
+                {
+                    "id": ["1", "1", "2", "3", "3"],
+                    "home": ["a", "b", "two", "A", "C"],
+                    "away": ["b", "c", "one", "C", "B"],
+                }
+            ).astype("category")
         ),
         data=[[1, 3, 4], [2], [10], [5, 9], [6, 7, 8]],
     )
@@ -80,13 +81,14 @@ def test_get_kwargs_from_matches():
     )
 
     expected = pd.Series(
-        index=pd.MultiIndex.from_arrays(
-            [
-                ["1", "1", "2", "3", "3"],
-                ["a", "b", "two", "A", "C"],
-                ["b", "c", "one", "C", "B"],
-            ],
-            names=["id", "home", "away"],
+        index=pd.MultiIndex.from_frame(
+            pd.DataFrame(
+                {
+                    "id": ["1", "1", "2", "3", "3"],
+                    "home": ["a", "b", "two", "A", "C"],
+                    "away": ["b", "c", "one", "C", "B"],
+                }
+            ).astype("category")
         ),
         data=[[1, 3, 4], [2, -1, -1], [10], [5, 9, -1], [6, 7, 8]],
         name="num schedules",
