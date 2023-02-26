@@ -32,7 +32,7 @@ class Matches:
                     "home"                -> pd.Categorical[str] (home team name),\n
                     "away"                -> pd.Categorical[str] (away team name),\n
                     "result"              -> "{home score}:{away score}",\n
-                    "winner"              -> pd.Categorical[Literal["h", "d", "a"]]
+                    "winner"              -> Literal["h", "d", "a"]
                         "h" -> home\n
                         "d" -> draw\n
                         "a" -> away
@@ -84,7 +84,6 @@ class Matches:
             "date number": int,
             "home": "category",
             "away": "category",
-            "winner": "category",
         }
 
         self.df = self.df.astype(data_types).set_index(index_cols).sort_index()
