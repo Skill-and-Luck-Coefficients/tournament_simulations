@@ -13,6 +13,29 @@ def single_round_robin():
     )
 
 
+def test_create_full_schedule_not_random(single_round_robin: srrs.SingleRoundRobin):
+
+    num_rounds = len(single_round_robin.schedule)
+
+    one_schedule = list(
+        single_round_robin.get_full_schedule(num_schedules=1, randomize_rounds=False)
+    )
+    assert single_round_robin.schedule == one_schedule
+
+    two_schedules = list(
+        single_round_robin.get_full_schedule(num_schedules=2, randomize_rounds=False)
+    )
+    assert single_round_robin.schedule == two_schedules[:num_rounds]
+    assert single_round_robin.schedule == two_schedules[num_rounds:]
+
+    three_schedules = list(
+        single_round_robin.get_full_schedule(num_schedules=3, randomize_rounds=False)
+    )
+    assert single_round_robin.schedule == three_schedules[:num_rounds]
+    assert single_round_robin.schedule == three_schedules[num_rounds : 2 * num_rounds]
+    assert single_round_robin.schedule == three_schedules[2 * num_rounds :]
+
+
 def test_create_full_schedule(single_round_robin: srrs.SingleRoundRobin):
 
     one_schedule = list(single_round_robin.get_full_schedule(num_schedules=1))
