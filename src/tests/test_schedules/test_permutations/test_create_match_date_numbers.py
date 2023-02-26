@@ -28,7 +28,7 @@ def test_get_date_numbers_per_match():
             ).astype("category")
         ),
         data=[[1, 3, 4], [2], [10], [5, 9], [6, 7, 8]],
-    )
+    ).rename("date number")
 
     assert cmd._get_date_numbers_per_match(test).equals(expected)
 

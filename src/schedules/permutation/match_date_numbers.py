@@ -41,6 +41,9 @@ class MatchDateNumbers:
 
     series: pd.Series
 
+    def __post_init__(self) -> None:
+        self.series = self.series.rename("date number")
+
     @classmethod
     def from_matches(cls, matches: Matches) -> MatchDateNumbers:
 
