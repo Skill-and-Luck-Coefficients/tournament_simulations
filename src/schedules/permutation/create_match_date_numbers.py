@@ -34,12 +34,16 @@ def _fill_date_numbers_per_match_per_id(
     Example:
         Suppose for a given "id" we have:
             teamA x teamB -> [0, 2, 4]
+
             teamB X teamC -> [0, 1, 2, 3]
+
             teamC X teamA -> [1, 2]
 
         After
             teamA x teamB -> [0, 2, 4, -1]
+
             teamB X teamC -> [0, 1, 2, 3]
+
             teamC X teamA -> [1, 2, -1, -1]
     """
 

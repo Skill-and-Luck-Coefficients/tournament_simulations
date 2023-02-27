@@ -16,33 +16,39 @@ class MatchDateNumbers:
     """
     Dataclass to store all date numbers which each pair (home, away) played in.
 
-    series: pd.Series[
-        index=[
-            "id" -> "{current_name}@/{sport}/{country}/{name-year}/",\n
-            "home"                -> str (home team name),\n
-            "away"                -> str (away team name),\n
-        ],\n
-        columns=[
-            "date number" -> list[int]
-                Date number in which "home" faced "away".
+    Remark: Index is automatically sorted after initialization.
 
-                -1 is a sentinel value for a match that doesn't exist.
-                More specifically, let X be
+        series: pd.Series[
+            index=[
+                "id"   -> pd.Categorical[str]
+                    "{current_name}@/{sport}/{country}/{name-year}/",
+                "home" -> pd.Categorical[str] (home team name),\n
+                "away" -> pd.Categorical[str] (away team name),\n
+            ],\n
+            columns=[
+                "date number" -> list[int]
+                    List of date numbers in which "home" faced "away".
 
-                    max_{home, away} number of matches between home and away
+                    The list is padded by -1 until all (home, away) pairs in a
+                    tournament have equal-length lists.
 
-                Then, if two teams face each other Y < X times, the list will
-                be padded with -1 until its total length is X.
+                    More specifically, let X be
 
-                This is done so all X - Y (X minus Y) rounds in which these two
-                teams don't face each other is randomized.
+                        max_{home, away} number of matches over all (home, away) pairs
+
+                    Then, if two teams face each other Y < X times, the list will
+                    be padded with -1 until its total length is X.
+
+                    This is done so all X - Y (X minus Y) rounds in which these two
+                    teams don't face each other are randomized.
+            ]
         ]
     """
 
     series: pd.Series
 
     def __post_init__(self) -> None:
-        self.series = self.series.rename("date number")
+        self.series = self.series.sort_index().rename("date number")
 
     @classmethod
     def from_matches(cls, matches: Matches) -> MatchDateNumbers:

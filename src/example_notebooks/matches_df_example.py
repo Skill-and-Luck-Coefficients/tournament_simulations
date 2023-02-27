@@ -87,11 +87,7 @@ _df_data_mw = {
     ],
 }
 
-matches_df_mw = (
-    pd.DataFrame(_df_data_mw)
-    .astype({"id": "category"})
-    .set_index(["id", "date number"])
-)
+matches_df_mw = pd.DataFrame(_df_data_mw).set_index(["id", "date number"])
 
 _df_data_tw = {
     "id": [
@@ -166,8 +162,92 @@ _df_data_tw = {
     ],
 }
 
-matches_df_tw = (
-    pd.DataFrame(_df_data_tw)
-    .astype({"id": "category"})
-    .set_index(["id", "date number"])
+matches_df_tw = pd.DataFrame(_df_data_tw).set_index(["id", "date number"])
+
+
+_df_data_permutation = {
+    "id": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+        "2",
+    ],
+    "date number": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+    ],
+    "home": [
+        "a",
+        "b",
+        "a",
+        "c",
+        "d",
+        "c",
+        "a",
+        "b",
+        "one",
+        "two",
+        "two",
+        "one",
+        "three",
+        "three",
+    ],
+    "away": [
+        "d",
+        "c",
+        "b",
+        "b",
+        "b",
+        "a",
+        "d",
+        "c",
+        "three",
+        "one",
+        "three",
+        "two",
+        "two",
+        "one",
+    ],
+    "winner": [
+        "h",
+        "d",
+        "d",
+        "a",
+        "d",
+        "a",
+        "a",
+        "h",
+        "d",
+        "d",
+        "a",
+        "h",
+        "h",
+        "a",
+    ],
+}
+
+matches_df_permutations = pd.DataFrame(_df_data_permutation).set_index(
+    ["id", "date number"]
 )
