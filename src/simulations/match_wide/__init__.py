@@ -1,5 +1,5 @@
 """
-Simulations per match, that is, each matchhas its own probability:
+Simulations per match, that is, each match has its own probability:
 [prob home win, prob draw, prob away win].
 """
 
