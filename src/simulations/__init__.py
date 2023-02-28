@@ -31,6 +31,7 @@
                 data_structure.points_per_match.PointsPerMatch.
 """
 
-from . import match_wide, tournament_wide
+from .simulate_matches import SimulateMatches
+from .simulate_points_per_match import SimulatePointsPerMatch
 
-__all__ = ["match_wide", "tournament_wide"]
+__all__ = ["SimulateMatches", "SimulatePointsPerMatch"]
