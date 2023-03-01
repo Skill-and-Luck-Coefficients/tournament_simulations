@@ -2,7 +2,7 @@ from collections import Counter
 
 import pytest
 
-import schedules.round_robin.single_round_robin as srrs
+import tournament_simulations.schedules.round_robin.single_round_robin as srrs
 
 
 @pytest.fixture

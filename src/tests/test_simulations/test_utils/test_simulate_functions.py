@@ -1,6 +1,6 @@
 import numpy as np
 
-import simulations.utils.simulate_functions as sf
+import tournament_simulations.simulations.utils.simulate_functions as sf
 
 
 def test_simulate_winners():

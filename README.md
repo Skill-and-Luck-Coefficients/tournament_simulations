@@ -29,11 +29,59 @@ $ conda env create -f environment.yml  # create env with all packages
 $ conda activate scrape_matches        # activate env
 ```
 
+**Remark**: `tournament_simulations` is the main folder, so you should run from the same directory
+you found this file after cloning the repository:
+
+```
+$ cd tournament_simulations
+```
+
+**Note**: If you want to use this as a package, after installing all required packages you should go to where this file is and run:
+
+```
+$ python3 -m pip install .
+```
+
+## Installation from sources
+In the same directory you found this file after cloning the repository, execute:
+
+```
+$ python3 -m pip install --upgrade build
+$ python3 -m build
+```
+
+For more information, see [Packaging Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/).
+
+Then, you can activate your virtual environment and run
+
+```
+$ python3 -m pip install dist/*.whl
+```
+
+or run
+
+```
+$ python3 -m pip install -e dist/*.whl
+```
+
+for installing in [development mode](https://pip.pypa.io/en/latest/cli/pip_install/#install-editable)
+
+You can also install optional packages:
+
+```
+$ python3 -m pip install ".[test]"      # packages for training
+$ python3 -m pip install ".[notebook]"  # packages for jupyter notebooks
+$ python3 -m pip install ".[lint]"      # packages for linting
+```
+
+**Running**
+
+src is the main project folder, so after installing dependencies you should
+
 ### **Installing locally**
 
 ```
-$ git clone https://github.com/EstefanoB/tournament_simulations.git
-$ pip install ./tournament_simulations
+$ pip install -e ./tournament_simulations/
 ```
 
 You can also add this module as a git submodule if you prefer.
@@ -53,10 +101,10 @@ There are two main pandas.DataFrame structures used in this project.
 
 - `data_structues.mat.Matches`
     - Stores tournament matches: tournament name, date, home-team, away-team, winner, etc..
-    - Definition/documentation in `src/data_structures/matches/matches.py`
+    - Definition/documentation in `src/tournament_simulations/data_structures/matches/matches.py`
 - `data_structues.mat.Matches`
     - Stores how many points a team gained all matches played (each one is a separate dataframe row).
-    - Definition/documentation in `src/data_structures/points_per_match/points_per_match.py/PointsPerMatch`
+    - Definition/documentation in `src/tournament_simulations/data_structures/points_per_match/points_per_match.py/PointsPerMatch`
 
 ### **Result Simulations**
 
@@ -72,10 +120,10 @@ Classes:
 
 - `simulations.SimulateMatches`: simulate `data_structues.mat.Matches`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
-    - Definition/documentation in `src/simulations/simulate_matches.py`
+    - Definition/documentation in `src/tournament_simulations/simulations/simulate_matches.py`
 - `simualtions.SimulatePointsPerMatch`: simulate `data_structues.mat.Matches`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
-    - Definition/documentation in `src/simulations/simulate_points_per_match.py`
+    - Definition/documentation in `src/tournament_simulations/simulations/simulate_points_per_match.py`
 
 ### **Round-Robin Schedule Creation**
 
@@ -83,10 +131,10 @@ Given either the number of teams or a list of team names, creates a random singl
 
 - `schedules.round_robin.SingleRoundRobin`
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
-    - Definition/documentation in `src/schedules/round_robin/single_round_robin.py`
+    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/single_round_robin.py`
 - `schedules.round_robin.DoubleRoundRobin`
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
-    - Definition/documentation in`src/schedules/round_robin/double_round_robin.py`
+    - Definition/documentation in`src/tournament_simulations/schedules/round_robin/double_round_robin.py`
 
 ### **Tournaments Permutations**
 
@@ -94,7 +142,12 @@ Permute tournament matches (Matches [data structure](#data-structures)) followin
 
 - `schedules.permutation.MatchesPermutations`
     - Contains a method to create n permutations: `.create_n_permutations(...)`
-    - Definition/documentation in `src/schedules/permutation/matches_permutations.py`
+    - Definition/documentation in `src/tournament_simulations/schedules/permutation/matches_permutations.py`
+
+## **Logs**
+
+By default, everything is logged to `src/logs/`. 
+Severity level can be changed in `src/logs/logs.py`.
 
 ## **Licensing**
 ---

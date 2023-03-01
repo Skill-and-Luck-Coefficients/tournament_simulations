@@ -1,4 +1,4 @@
-import schedules.round_robin.create_single_round_robin as csrr
+import tournament_simulations.schedules.round_robin.create_single_round_robin as csrr
 
 
 def test_create_team_list():

@@ -3,7 +3,7 @@ from typing import Callable
 import pandas as pd
 import pytest
 
-import simulations.utils.batch_simulations as bat
+import tournament_simulations.simulations.utils.batch_simulations as bat
 
 
 def test_create_column_names():

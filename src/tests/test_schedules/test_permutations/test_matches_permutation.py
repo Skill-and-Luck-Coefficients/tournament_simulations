@@ -3,7 +3,7 @@ import random
 import pandas as pd
 import pytest
 
-import schedules.permutation.matches_permutation as mp
+import tournament_simulations.schedules.permutation.matches_permutation as mp
 
 
 @pytest.fixture

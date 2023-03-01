@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import simulations.tournament_wide.simulate as simul
+import tournament_simulations.simulations.tournament_wide.simulate as simul
 
 
 @pytest.fixture

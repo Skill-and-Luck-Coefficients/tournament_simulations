@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-import simulations.match_wide.batch as batch
+import tournament_simulations.simulations.match_wide.batch as batch
 
 
 @pytest.fixture

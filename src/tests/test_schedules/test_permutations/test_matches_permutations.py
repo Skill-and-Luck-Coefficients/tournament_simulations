@@ -1,6 +1,6 @@
 import pandas as pd
 
-import schedules.permutation.matches_permutations as mp
+import tournament_simulations.schedules.permutation.matches_permutations as mp
 
 
 def test_create_n_permutations():

@@ -1,4 +1,4 @@
-import schedules.round_robin.utils.rename_teams as rt
+import tournament_simulations.schedules.round_robin.utils.rename_teams as rt
 
 
 def test_empty_rename_teams_in_rounds_one():

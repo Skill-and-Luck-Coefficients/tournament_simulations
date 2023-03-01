@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-import schedules.permutation.create_permutation_index as cpi
+import tournament_simulations.schedules.permutation.create_permutation_index as cpi
 
 
 def test_generate_all_indexes_one_id():

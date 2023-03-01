@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-import schedules.permutation.create_permutation_schedule as cps
+import tournament_simulations.schedules.permutation.create_permutation_schedule as cps
 
 
 @dataclass

@@ -1,6 +1,6 @@
 import pandas as pd
 
-import schedules.permutation.permutation_index as pi
+import tournament_simulations.schedules.permutation.permutation_index as pi
 
 
 def test_to_list():
