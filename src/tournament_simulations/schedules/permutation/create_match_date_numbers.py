@@ -1,9 +1,7 @@
-import logging
-
 import pandas as pd
 
 from tournament_simulations.data_structures.matches import Matches
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 KwargsMD = dict[str, pd.DataFrame]
 
@@ -62,7 +60,7 @@ def _fill_date_numbers_per_match_per_id(
     return date_numbers_per_match + padding_negative_ones
 
 
-@log(logging.debug)
+@log(tournament_simulations_logger.debug)
 def get_kwargs_from_matches(matches: Matches) -> KwargsMD:
 
     """

@@ -146,8 +146,8 @@ Permute tournament matches (Matches [data structure](#data-structures)) followin
 
 ## **Logs**
 
-By default, everything is logged to `src/logs/`. 
-Severity level can be changed in `src/logs/logs.py`.
+By default, everything is logged to `tournament_simulations_logs.log` located in whatever your current working directory is. 
+Severity level can be changed in `src/logs/logs.py`. By default it is `logging.WARNING`.
 
 ## **Licensing**
 ---

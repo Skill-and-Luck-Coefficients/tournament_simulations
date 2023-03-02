@@ -4,6 +4,7 @@ import pandas as pd
 
 import tournament_simulations.schedules.round_robin as rr
 from tournament_simulations.data_structures.matches import Id
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 from .match_date_numbers import MatchDateNumbers
 from .permutation_schedule import PermutationSchedule
@@ -64,6 +65,7 @@ def _get_kwargs(
     }
 
 
+@log(tournament_simulations_logger.debug)
 def get_kwargs_from_schedule__date_number(
     permuatation_schedule: PermutationSchedule,
     match_date_numbers: MatchDateNumbers,

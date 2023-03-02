@@ -1,10 +1,8 @@
-import logging
-
 import numpy as np
 import pandas as pd
 
 import tournament_simulations.data_structures.matches as mat
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 TeamPontuation = tuple[mat.Team, int]
 TeamsMatchPoints = tuple[TeamPontuation, TeamPontuation]
@@ -31,7 +29,9 @@ def _get_teams_points_per_match(home_away_winner: pd.Series) -> pd.Series:
             return ((home, 1), (away, 1))
 
         else:
-            logging.warning(f"Invalid parameter: {home_away_winner}.")
+            tournament_simulations_logger.warning(
+                f"Invalid parameter: {home_away_winner}."
+            )
             return np.nan
 
     return (
@@ -41,7 +41,7 @@ def _get_teams_points_per_match(home_away_winner: pd.Series) -> pd.Series:
     )
 
 
-@log(logging.debug)
+@log(tournament_simulations_logger.debug)
 def get_kwargs_from_home_away_winner(
     home_away_winner: pd.Series,
 ) -> KwargsPPM:

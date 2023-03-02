@@ -1,8 +1,7 @@
-import logging
 import random
 from typing import Iterable
 
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 from .utils.rename_teams import rename_teams_in_rounds
 from .utils.types import Round, Team
@@ -24,7 +23,7 @@ def _generate_round_matches(teams: list[int], matches_per_round: int) -> Round:
     return tuple((teams[i], teams[-i - 1]) for i in range(matches_per_round))
 
 
-@log(logging.debug)
+@log(tournament_simulations_logger.debug)
 def _generate_schedule(teams: list[int]) -> list[Round]:
 
     matches_per_round = len(teams) // 2
@@ -64,7 +63,7 @@ def _shuffle_home_away_in_matches(schedule: list[Round]) -> list[Round]:
     return new_schedule
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def get_kwargs_from_num_teams(
     num_teams: int,
     randomize_teams: bool,
@@ -112,7 +111,7 @@ def get_kwargs_from_num_teams(
     }
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def get_kwargs_from_team_names(
     team_names: Iterable[Team],
     randomize_teams: bool,

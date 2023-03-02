@@ -1,7 +1,6 @@
-import logging
 from typing import Iterable
 
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 from .single_round_robin import SingleRoundRobin
 from .utils.rename_teams import rename_teams_in_rounds
@@ -10,7 +9,7 @@ from .utils.types import Team
 KwargsDRR = dict[str, int | SingleRoundRobin]
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def get_kwargs_from_num_teams(
     num_teams: int,
     randomize_teams: bool,
@@ -49,7 +48,7 @@ def get_kwargs_from_num_teams(
     }
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def get_kwargs_from_team_names(
     team_names: Iterable[Team],
     randomize_teams: bool,

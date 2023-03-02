@@ -1,9 +1,8 @@
-import logging
 from typing import Callable
 
 import pandas as pd
 
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 from ..utils.batch_simulations import batch_simulate_tournaments_template
 from .simulate import (
@@ -12,7 +11,7 @@ from .simulate import (
 )
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def batch_simulate_winners(
     id_to_probabilities: pd.Series,
     id_to_num_matches: pd.Series,
@@ -93,7 +92,7 @@ def batch_simulate_winners(
     )
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def batch_simulate_points_per_match(
     id_to_probabilities: pd.Series,
     id_to_num_matches: pd.Series,

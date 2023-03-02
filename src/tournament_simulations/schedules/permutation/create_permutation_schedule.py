@@ -4,6 +4,7 @@ import pandas as pd
 
 import tournament_simulations.schedules.round_robin as rr
 from tournament_simulations.data_structures.matches import Matches
+from tournament_simulations.logs import log, tournament_simulations_logger
 from tournament_simulations.utils.convert_df_to_series import (
     convert_df_to_series_of_tuples,
 )
@@ -72,6 +73,7 @@ def _get_kwargs(
     return {"series": _create_schedule_per_id(id_to_schedule__match_count)}
 
 
+@log(tournament_simulations_logger.info)
 def get_kwargs_from_matches(matches: Matches) -> KwargsPS:
     """
     Returns necessary parameters to initialize PermutationSchedule.

@@ -1,13 +1,13 @@
 import logging
 from pathlib import Path
 
-LOG_DIR: Path = Path("../logs/")
-LOG_DIR.mkdir(exist_ok=True, parents=True)
+NAME = "tournament_simulations_logs"
+FILE = Path("./tournament_simulations_logs.log")
+LEVEL = logging.WARNING
 
-LOG_PATH: Path = LOG_DIR / "simulation.log"
+handler = logging.FileHandler(FILE)
+handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
 
-logging.basicConfig(
-    filename=LOG_PATH,
-    format="%(asctime)s %(levelname)s %(message)s",
-    level=logging.DEBUG,
-)
+tournament_simulations_logger = logging.getLogger(NAME)
+tournament_simulations_logger.setLevel(LEVEL)
+tournament_simulations_logger.addHandler(handler)

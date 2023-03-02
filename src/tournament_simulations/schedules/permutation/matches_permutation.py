@@ -1,9 +1,7 @@
-import logging
-
 import pandas as pd
 
 from tournament_simulations.data_structures.matches import DateNumber, Matches
-from tournament_simulations.logs import log
+from tournament_simulations.logs import log, tournament_simulations_logger
 
 from .match_date_numbers import MatchDateNumbers
 from .permutation_index import PermutationIndex
@@ -95,7 +93,7 @@ def _select_matches_in_the_desired_order(
     return Matches(new_matches_df)
 
 
-@log(logging.info)
+@log(tournament_simulations_logger.info)
 def create_one_permutation(
     matches: Matches,
     matches_date_numbers: MatchDateNumbers,
