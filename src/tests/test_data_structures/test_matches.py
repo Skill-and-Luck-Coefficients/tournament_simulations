@@ -1,7 +1,6 @@
+import data_structures as ds
 import pandas as pd
 import pytest
-
-import data_structures as ds
 
 
 @pytest.fixture
@@ -15,7 +14,7 @@ def first_matches():
     }
     df = pd.DataFrame(data=cols).set_index(["id", "date number"])
 
-    return ds.mat.Matches(df)
+    return ds.Matches(df)
 
 
 @pytest.fixture
@@ -30,10 +29,10 @@ def second_matches():
     }
     df = pd.DataFrame(data=cols).set_index(["id", "date number"])
 
-    return ds.mat.Matches(df)
+    return ds.Matches(df)
 
 
-def test_team_names_per_id_first_matches(first_matches: ds.mat.Matches):
+def test_team_names_per_id_first_matches(first_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [["four", "one"], ["A", "B", "C", "D"]]
@@ -42,7 +41,7 @@ def test_team_names_per_id_first_matches(first_matches: ds.mat.Matches):
     assert first_matches.team_names_per_id.equals(expected)
 
 
-def test_team_names_per_id_second_matches(second_matches: ds.mat.Matches):
+def test_team_names_per_id_second_matches(second_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [["four", "one", "three", "two"], ["A", "B", "C"]]
@@ -51,7 +50,7 @@ def test_team_names_per_id_second_matches(second_matches: ds.mat.Matches):
     assert second_matches.team_names_per_id.equals(expected)
 
 
-def test_number_of_matches_per_id_first_matches(first_matches: ds.mat.Matches):
+def test_number_of_matches_per_id_first_matches(first_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [1, 3]
@@ -60,7 +59,7 @@ def test_number_of_matches_per_id_first_matches(first_matches: ds.mat.Matches):
     assert first_matches.number_of_matches_per_id.equals(expected)
 
 
-def test_number_of_matches_per_id_second_matches(second_matches: ds.mat.Matches):
+def test_number_of_matches_per_id_second_matches(second_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [2, 3]
@@ -69,7 +68,7 @@ def test_number_of_matches_per_id_second_matches(second_matches: ds.mat.Matches)
     assert second_matches.number_of_matches_per_id.equals(expected)
 
 
-def test_probabilities_per_id_first_matches(first_matches: ds.mat.Matches):
+def test_probabilities_per_id_first_matches(first_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [(1, 0, 0), (0, 1 / 3, 2 / 3)]
@@ -78,7 +77,7 @@ def test_probabilities_per_id_first_matches(first_matches: ds.mat.Matches):
     assert first_matches.probabilities_per_id.equals(expected)
 
 
-def test_probabilities_per_id_second_matches(second_matches: ds.mat.Matches):
+def test_probabilities_per_id_second_matches(second_matches: ds.Matches):
 
     expected_index = ["1", "2"]
     expected_data = [(0, 1, 0), (1 / 3, 1 / 3, 1 / 3)]
@@ -87,7 +86,7 @@ def test_probabilities_per_id_second_matches(second_matches: ds.mat.Matches):
     assert second_matches.probabilities_per_id.equals(expected)
 
 
-def test_home_away_winner_first_matches(first_matches: ds.mat.Matches):
+def test_home_away_winner_first_matches(first_matches: ds.Matches):
 
     expected_data = [
         ("one", "four", "h"),
@@ -100,7 +99,7 @@ def test_home_away_winner_first_matches(first_matches: ds.mat.Matches):
     assert first_matches.home_away_winner.equals(expected)
 
 
-def test_home_away_winner_second_matches(second_matches: ds.mat.Matches):
+def test_home_away_winner_second_matches(second_matches: ds.Matches):
 
     expected_data = [
         ("one", "two", "d"),
@@ -114,7 +113,7 @@ def test_home_away_winner_second_matches(second_matches: ds.mat.Matches):
     assert second_matches.home_away_winner.equals(expected)
 
 
-def test_home_vs_away_count_per_id_first_matches(first_matches: ds.mat.Matches):
+def test_home_vs_away_count_per_id_first_matches(first_matches: ds.Matches):
 
     expected = pd.Series(
         index=pd.MultiIndex.from_frame(
@@ -132,7 +131,7 @@ def test_home_vs_away_count_per_id_first_matches(first_matches: ds.mat.Matches):
     assert first_matches.home_vs_away_count_per_id.equals(expected)
 
 
-def test_home_vs_away_count_per_id_second_matches(second_matches: ds.mat.Matches):
+def test_home_vs_away_count_per_id_second_matches(second_matches: ds.Matches):
 
     expected = pd.Series(
         index=pd.MultiIndex.from_frame(

@@ -9,8 +9,7 @@ For specific information about a data structure, read its respective
 "__init__.py" file or its class documentation.
 """
 
-from . import matches as mat
-from . import points_per_match as ppm
-from . import utils
+from .matches import Matches
+from .points_per_match import PointsPerMatch
 
-__all__ = ["mat", "ppm", "utils"]
+__all__ = ["Matches", "PointsPerMatch"]

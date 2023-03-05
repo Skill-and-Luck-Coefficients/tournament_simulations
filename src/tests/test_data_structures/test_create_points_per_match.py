@@ -1,7 +1,6 @@
-import pandas as pd
-
 import data_structures as ds
 import data_structures.points_per_match.create_points_per_match as cppm
+import pandas as pd
 
 
 def test_get_teams_points_per_match_first():
@@ -39,7 +38,7 @@ def test_create_points_per_match_first():
         "away": ["C", "C", "d", "b", "b"],
         "winner": ["d", "a", "h", "h", "d"],
     }
-    test = ds.mat.Matches(
+    test = ds.Matches(
         pd.DataFrame(data=test_cols).set_index(["id", "date number"])
     ).home_away_winner
 
@@ -89,7 +88,7 @@ def test_create_points_per_match_second():
             "d",
         ],
     }
-    test = ds.mat.Matches(
+    test = ds.Matches(
         pd.DataFrame(data=test_cols).set_index(["id", "date number"])
     ).home_away_winner
 

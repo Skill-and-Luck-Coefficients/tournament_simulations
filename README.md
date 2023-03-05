@@ -87,10 +87,10 @@ Their checkpoins have also been pushed to GitHub, so you can just take a look be
 
 There are two main pandas.DataFrame structures used in this project.
 
-- `data_structues.mat.Matches`
+- `data_structues.Matches`
     - Stores tournament matches: tournament name, date, home-team, away-team, winner, etc..
     - Definition/documentation in `src/tournament_simulations/data_structures/matches/matches.py`
-- `data_structues.mat.Matches`
+- `data_structues.PointsPerMatch`
     - Stores how many points a team gained all matches played (each one is a separate dataframe row).
     - Definition/documentation in `src/tournament_simulations/data_structures/points_per_match/points_per_match.py/PointsPerMatch`
 
@@ -106,10 +106,10 @@ Simulations can be tournament-wide or match-wide:
 
 Classes:
 
-- `simulations.SimulateMatches`: simulate `data_structues.mat.Matches`
+- `simulations.SimulateMatches`: simulate `data_structues.Matches`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
     - Definition/documentation in `src/tournament_simulations/simulations/simulate_matches.py`
-- `simualtions.SimulatePointsPerMatch`: simulate `data_structues.mat.Matches`
+- `simualtions.SimulatePointsPerMatch`: simulate `data_structues.PointsPerMatch`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
     - Definition/documentation in `src/tournament_simulations/simulations/simulate_points_per_match.py`
 

@@ -13,12 +13,10 @@ Module responsible for creating schedules for round-robin tournaments.
         <first,second>_single_round_robin are each a SingleRoundRobin.
 """
 
-from . import utils
 from .double_round_robin import DoubleRoundRobin
 from .single_round_robin import SingleRoundRobin
 
 __all__ = [
-    "utils",
     "DoubleRoundRobin",
     "SingleRoundRobin",
 ]

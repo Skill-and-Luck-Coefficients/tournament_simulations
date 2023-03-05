@@ -6,7 +6,7 @@ import tournament_simulations.schedules.permutation.create_match_date_numbers as
 
 def test_get_date_numbers_per_match():
 
-    test = ds.mat.Matches(
+    test = ds.Matches(
         pd.DataFrame(
             {
                 "id": ["1", "1", "1", "1", "3", "3", "3", "3", "3", "2"],
@@ -69,7 +69,7 @@ def test_fill_date_number_one_line():
 
 def test_get_kwargs_from_matches():
 
-    matches = ds.mat.Matches(
+    matches = ds.Matches(
         pd.DataFrame(
             {
                 "id": ["1", "1", "1", "1", "3", "3", "3", "3", "3", "2"],

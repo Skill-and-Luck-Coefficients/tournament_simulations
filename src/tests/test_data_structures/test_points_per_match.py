@@ -1,8 +1,7 @@
+import data_structures as ds
 import numpy as np
 import pandas as pd
 import pytest
-
-import data_structures as ds
 
 
 @pytest.fixture
@@ -15,7 +14,7 @@ def ppm_one():
         "date number": [2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1],
     }
 
-    return ds.ppm.PointsPerMatch(
+    return ds.PointsPerMatch(
         pd.DataFrame(data=test)
         .astype({"id": "category", "team": "category", "points": np.int16})
         .set_index(["id", "date number"])
@@ -31,14 +30,14 @@ def ppm_two():
         "points": [1, 1, 1, 1, 0, 3, 1, 1, 3, 0],
         "date number": [0, 0, 1, 1, 0, 0, 0, 0, 1, 1],
     }
-    return ds.ppm.PointsPerMatch(
+    return ds.PointsPerMatch(
         pd.DataFrame(data=cols)
         .astype({"id": "category", "team": "category", "points": np.int16})
         .set_index(["id", "date number"])
     )
 
 
-def test_team_names_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
+def test_team_names_per_id_ppm_one(ppm_one: ds.PointsPerMatch):
 
     expected_values = [{"A", "B", "C"}, {"a", "b", "c", "d"}, {"o", "t"}]
     expected = pd.Series(
@@ -47,7 +46,7 @@ def test_team_names_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
     assert ppm_one.team_names_per_id.equals(expected)
 
 
-def test_team_names_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
+def test_team_names_per_id_ppm_two(ppm_two: ds.PointsPerMatch):
 
     expected_values = [
         {"one", "two", "three", "four"},
@@ -59,7 +58,7 @@ def test_team_names_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
     assert ppm_two.team_names_per_id.equals(expected)
 
 
-def test_number_of_matches_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
+def test_number_of_matches_per_id_ppm_one(ppm_one: ds.PointsPerMatch):
 
     expected_values = [2, 3, 2]
     expected = pd.Series(
@@ -68,7 +67,7 @@ def test_number_of_matches_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
     assert ppm_one.number_of_matches_per_id.equals(expected)
 
 
-def test_number_of_matches_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
+def test_number_of_matches_per_id_ppm_two(ppm_two: ds.PointsPerMatch):
 
     expected_values = [2, 3]
     expected = pd.Series(
@@ -77,7 +76,7 @@ def test_number_of_matches_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
     assert ppm_two.number_of_matches_per_id.equals(expected)
 
 
-def test_probabilities_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
+def test_probabilities_per_id_ppm_one(ppm_one: ds.PointsPerMatch):
 
     expected_values = [
         (
@@ -102,7 +101,7 @@ def test_probabilities_per_id_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
     assert ppm_one.probabilities_per_id.equals(expected)
 
 
-def test_probabilities_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
+def test_probabilities_per_id_ppm_two(ppm_two: ds.PointsPerMatch):
 
     expected_values = [
         (
@@ -122,7 +121,7 @@ def test_probabilities_per_id_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
     assert ppm_two.probabilities_per_id.equals(expected)
 
 
-def test_rankings_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
+def test_rankings_ppm_one(ppm_one: ds.PointsPerMatch):
 
     expected_cols = {
         "id": ["1", "1", "1", "2", "2", "2", "2", "3", "3"],
@@ -137,7 +136,7 @@ def test_rankings_ppm_one(ppm_one: ds.ppm.PointsPerMatch):
     assert ppm_one.rankings.equals(expected)
 
 
-def test_rankings_ppm_two(ppm_two: ds.ppm.PointsPerMatch):
+def test_rankings_ppm_two(ppm_two: ds.PointsPerMatch):
 
     expected_cols = {
         "id": ["1", "1", "1", "1", "2", "2", "2", "2", "2", "2"],
