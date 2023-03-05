@@ -1,4 +1,4 @@
-# TournamentSimulation
+# Tournament Simulations
 Repository dedicated to tournament simulations.
 
 ## **How to use it**
