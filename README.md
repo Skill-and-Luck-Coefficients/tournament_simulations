@@ -74,18 +74,6 @@ $ python3 -m pip install ".[notebook]"  # packages for jupyter notebooks
 $ python3 -m pip install ".[lint]"      # packages for linting
 ```
 
-**Running**
-
-src is the main project folder, so after installing dependencies you should
-
-### **Installing locally**
-
-```
-$ pip install -e ./tournament_simulations/
-```
-
-You can also add this module as a git submodule if you prefer.
-
 <br>
 
 ## **API**
