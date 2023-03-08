@@ -15,8 +15,12 @@ Module responsible for creating schedules for round-robin tournaments.
 
 from .double_round_robin import DoubleRoundRobin
 from .single_round_robin import SingleRoundRobin
+from .utils.convert_rounds_to_dataframe import convert_list_of_rounds_to_dataframe
+from .utils.rename_teams import rename_teams_in_rounds
 
 __all__ = [
     "DoubleRoundRobin",
     "SingleRoundRobin",
+    "convert_list_of_rounds_to_dataframe",
+    "rename_teams_in_rounds",
 ]
