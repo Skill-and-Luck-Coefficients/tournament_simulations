@@ -48,7 +48,7 @@ class SimulateMatches:
 
                 Function to be applied after simulating data.
                     Input Index:
-                        self.ppm.df.set_index(["team", "away"], append=True).index
+                        self.matches.df.set_index(["home", "away"], append=True).index
                             Team names are in index so that they are also returned
                     Input Columns:
                         f"s{i}" -> winners for i-th simulation
@@ -69,7 +69,7 @@ class SimulateMatches:
             pd.DataFrame
                 By default, winner of matches for all simulations.
                     Index:
-                        self.ppm.df.set_index(["team", "away"], append=True).index
+                        self.matches.df.set_index(["home", "away"], append=True).index
                             Team names are in index so that they are also returned
                     Columns:
                         f"s{i}" -> winners for i-th simulation
@@ -123,7 +123,7 @@ class SimulateMatches:
 
                 Function to be applied after simulating data.
                     Input Index:
-                        self.ppm.df.set_index(["team", "away"], append=True).index
+                        self.matches.df.set_index(["home", "away"], append=True).index
                             Team names are in index so that they are also returned
                     Input Columns:
                         f"s{i}" -> winners for i-th simulation
@@ -134,7 +134,7 @@ class SimulateMatches:
             pd.DataFrame
                 By default, winner of matches for all simulations.
                     Index:
-                        self.ppm.df.set_index(["team", "away"], append=True).index
+                        self.matches.df.set_index(["home", "away"], append=True).index
                             Team names are in index so that they are also returned
                     Columns:
                         f"s{i}" -> winners for i-th simulation
