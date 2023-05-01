@@ -26,17 +26,17 @@ def test_generate_round_matches():
     )
 
 
-def test_generate_schedule():
+def testgenerate_schedule():
 
     teams = [0, 1]
 
-    assert csrr._generate_schedule(teams) == [((0, 1),)]
+    assert csrr.generate_schedule(teams) == [((0, 1),)]
 
     teams = [-1, 0, 1, 2]
-    assert csrr._generate_schedule(teams) == [((0, 1),), ((2, 0),), ((1, 2),)]
+    assert csrr.generate_schedule(teams) == [((0, 1),), ((2, 0),), ((1, 2),)]
 
     teams = [0, 1, 2, 3]
-    assert csrr._generate_schedule(teams) == [
+    assert csrr.generate_schedule(teams) == [
         ((0, 3), (1, 2)),
         ((0, 2), (3, 1)),
         ((0, 1), (2, 3)),

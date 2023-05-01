@@ -24,7 +24,25 @@ def _generate_round_matches(teams: list[int], matches_per_round: int) -> Round:
 
 
 @log(tournament_simulations_logger.debug)
-def _generate_schedule(teams: list[int]) -> list[Round]:
+def generate_schedule(teams: list[int]) -> list[Round]:
+
+    """
+    Generate a schedule following the circle-method algorithm.
+    See: https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
+
+    ----
+    Parameters:
+        teams: list[int]
+            List of team names (integers).
+
+    ----
+    Returns:
+        list[ # List of rounds
+            tuple[ # Rounds (list of matches)
+                tuple[Team, Team], # Match
+                ...
+        ]
+    """
 
     matches_per_round = len(teams) // 2
 
@@ -102,7 +120,7 @@ def get_kwargs_from_num_teams(
     if randomize_teams:
         random.shuffle(teams)
 
-    schedule = _generate_schedule(teams)
+    schedule = generate_schedule(teams)
     shuffled_schedule = _shuffle_home_away_in_matches(schedule)
 
     return {
