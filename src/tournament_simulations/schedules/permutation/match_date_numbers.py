@@ -34,12 +34,12 @@ class MatchDateNumbers:
 
                     More specifically, let X be
 
-                        max_{home, away} number of matches over all (home, away) pairs
+                        max number of matches over all (home, away) pairs
 
                     Then, if two teams face each other Y < X times, the list will
                     be padded with -1 until its total length is X.
 
-                    This is done so all X - Y (X minus Y) rounds in which these two
+                    This is done so all X - Y (X minus Y) rounds these two
                     teams don't face each other are randomized.
             ]
         ]
@@ -53,6 +53,15 @@ class MatchDateNumbers:
     @classmethod
     def from_matches(cls, matches: Matches) -> MatchDateNumbers:
 
+        """
+        Create an instance of MatchDateNumbers from matches.
+
+        ----
+        Parameters:
+
+            matches: Matches
+                Matches for all tournaments.
+        """
         parameters = get_kwargs_from_matches(matches)
         return cls(**parameters)
 

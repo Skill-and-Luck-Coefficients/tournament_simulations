@@ -1,6 +1,6 @@
-import data_structures as ds
 import pandas as pd
 
+import tournament_simulations.data_structures as ds
 import tournament_simulations.schedules.permutation.create_match_date_numbers as cmd
 
 

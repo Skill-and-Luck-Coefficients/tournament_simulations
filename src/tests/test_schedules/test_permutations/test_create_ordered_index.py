@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-import tournament_simulations.schedules.permutation.create_permutation_index as cpi
+import tournament_simulations.schedules.permutation.create_ordered_index as coi
 
 
 def test_generate_all_indexes_one_id():
@@ -49,7 +49,7 @@ def test_generate_all_indexes_one_id():
         ("id", 1, "a", "b"),
     ]
 
-    assert cpi._generate_all_indexes_one_id(matches, dates_numbers, id_) == expected
+    assert coi._generate_all_indexes_one_id(matches, dates_numbers, id_) == expected
 
     dates_numbers = pd.Series(
         index=pd.MultiIndex.from_frame(
@@ -83,7 +83,7 @@ def test_generate_all_indexes_one_id():
         ("id", 1, "a", "b"),
     ]
 
-    assert cpi._generate_all_indexes_one_id(matches, dates_numbers, id_) == expected
+    assert coi._generate_all_indexes_one_id(matches, dates_numbers, id_) == expected
 
 
 def test_generate_matches_permutation_index_one_id():
@@ -118,7 +118,7 @@ def test_generate_matches_permutation_index_one_id():
     ]
 
     assert (
-        cpi._generate_matches_permutation_index_one_id(schedule, matches_dates)
+        coi._generate_matches_permutation_index_one_id(schedule, matches_dates)
         == expected
     )
 
@@ -203,5 +203,5 @@ def test_get_kwargs(
         }
     ).set_index("id")["index"]
 
-    params = cpi._get_kwargs(id_to_permutation_schedule, id_to_matches_dates)
+    params = coi._get_kwargs(id_to_permutation_schedule, id_to_matches_dates)
     assert params["series"].equals(expected)

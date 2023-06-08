@@ -4,17 +4,17 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from .create_permutation_index import get_kwargs_from_schedule__date_number
+from .create_ordered_index import get_kwargs_from_schedule__date_number
 from .match_date_numbers import MatchDateNumbers
-from .permutation_schedule import PermutationSchedule
+from .tournament_schedule import TournamentSchedule
 from .utils.types import MatchIndexWithTeams
 
 
 @dataclass
-class PermutationIndex:
+class OrderedIndex:
 
     """
-    Permuted tournaments index required to create MatchesPermutation.
+    Ordered indexes required to create tournament schedules.
 
     Remark: Index is automatically sorted after initialization.
 
@@ -45,13 +45,13 @@ class PermutationIndex:
         return self.series.explode(ignore_index=True).to_list()
 
     @classmethod
-    def from_schedule__date_number(
+    def from_schedule__date_numbers(
         cls,
-        permuatation_schedule: PermutationSchedule,
+        tournament_schedule: TournamentSchedule,
         match_date_numbers: MatchDateNumbers,
-    ) -> PermutationIndex:
+    ) -> OrderedIndex:
 
         parameters = get_kwargs_from_schedule__date_number(
-            permuatation_schedule, match_date_numbers
+            tournament_schedule, match_date_numbers
         )
         return cls(**parameters)

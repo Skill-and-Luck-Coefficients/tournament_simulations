@@ -117,6 +117,10 @@ Classes:
 
 Given either the number of teams or a list of team names, creates a random single/double round-robin scheduler. It can create long tournaments by concatenating round-robin schedules together.
 
+Algorithm: https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
+
+Classes:
+
 - `schedules.round_robin.SingleRoundRobin`
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
     - Definition/documentation in `src/tournament_simulations/schedules/round_robin/single_round_robin.py`
@@ -124,13 +128,44 @@ Given either the number of teams or a list of team names, creates a random singl
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
     - Definition/documentation in`src/tournament_simulations/schedules/round_robin/double_round_robin.py`
 
+Functions:
+
+- `schedules.round_robin.generate_schedule`
+    - Create a single round-robin schedule with the circle-method.
+    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/circle_method.py`
+
+- `schedules.round_robin.convert_list_of_rounds_to_dataframe`
+    - Utility function that easily converts list of rounds to a dataframe compatible with `data_structures.Matches`.
+    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/utils/convert_rounds_to_dataframe.py`
+
+- `rename_teams_in_rounds`
+    - If teams are integers, this function allows you to rename them.
+    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/utils/rename_teams.py`
+
 ### **Tournaments Permutations**
 
-Permute tournament matches (Matches [data structure](#data-structures)) following a double-round robin schedule.
+Permute tournament matches (Matches [data structure](#data-structures)) following a valid tournament schedule.
 
-- `schedules.permutation.MatchesPermutations`
-    - Contains a method to create n permutations: `.create_n_permutations(...)`
-    - Definition/documentation in `src/tournament_simulations/schedules/permutation/matches_permutations.py`
+"Valid" in this context means that all matches from the original tournament must be in the schedule. 
+
+Classes:
+
+- `schedules.permutation.TournamentSchedule`
+    - Can be easily created from tournament scheduling functions.
+    - Definition/documentation in `src/tournament_simulations/schedules/permutation/tournament_schedule.py`
+
+- `schedules.permutation.MatchDateNumbers`
+    - Useful to randomize the order of matches between a team-pair: `.create_shuffled_copy()`.
+    - Definition/documentation in `src/tournament_simulations/schedules/permutation/match_date_numbers.py`
+
+- `schedules.permutation.OrderedIndex`
+    - Stores permuted index for each tournament.
+    - Can be created from `TournamentSchedule` and `MatchDateNumbers`.
+    - Definition/documentation in `src/tournament_simulations/schedules/permutation/ordered_index.py`
+
+- `schedules.permutation.PermuteMatches`
+    - Contains a method to permute `data_structures.Matches` given an `OrderedIndex`: `.permute_matches(...)`
+    - Definition/documentation in `src/tournament_simulations/schedules/permutation/permute_matches.py`
 
 ## **Logs**
 

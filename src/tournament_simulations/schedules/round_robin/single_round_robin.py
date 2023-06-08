@@ -44,6 +44,9 @@ class SingleRoundRobin:
         You can think of it as the the index position for
         a list with team names.
 
+        Algorithm:
+            https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
+
         -----
         Parameters:
             num_teams: int
@@ -74,6 +77,9 @@ class SingleRoundRobin:
         """
         In this case, a team will be whatever was passed as its name.
             i-th team will be represented by team_names[i]
+
+        Algorithm:
+            https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
 
         -----
         Parameters:

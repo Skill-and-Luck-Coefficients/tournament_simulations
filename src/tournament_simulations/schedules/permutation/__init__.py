@@ -1,13 +1,16 @@
 """
 Module containing functions and classes responsible for creating
-permutations of all tournament's matches.
-
-Permutations in this context follow either a double round-robin schedule
-in an attempt to avoid match sequences which would never happen in real life.
-
-It is assumed that no (home, away) match occur in the same date number.
+reordering tournament's matches.
 """
 
-from .matches_permutations import MatchesPermutations
+from .match_date_numbers import MatchDateNumbers
+from .ordered_index import OrderedIndex
+from .permute_matches import PermuteMatches
+from .tournament_schedule import TournamentSchedule
 
-__all__ = ["MatchesPermutations"]
+__all__ = [
+    "MatchDateNumbers",
+    "OrderedIndex",
+    "PermuteMatches",
+    "TournamentSchedule",
+]
