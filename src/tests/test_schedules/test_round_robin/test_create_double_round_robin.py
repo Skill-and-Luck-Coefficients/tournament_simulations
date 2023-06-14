@@ -1,4 +1,4 @@
-import tournament_simulations.schedules.round_robin.create_single_round_robin as csrr
+import tournament_simulations.schedules.round_robin.create_double_round_robin as cdrr
 
 
 def test_get_kwargs_from_num_teams():
@@ -7,22 +7,22 @@ def test_get_kwargs_from_num_teams():
         return []
 
     for num_teams in range(15):
-        kwargs = csrr.get_kwargs_from_num_teams(num_teams, _scheduling_func)
+        kwargs = cdrr.get_kwargs_from_num_teams(num_teams, _scheduling_func)
 
         assert kwargs["num_teams"] == num_teams
         assert kwargs["team_names"] == list(range(num_teams))
-        assert kwargs["schedule"] == []
+        assert kwargs["first_schedule"] == []
 
     def _scheduling_func(integer):
         return list(range(integer))
 
     for num_teams in range(15):
 
-        kwargs = csrr.get_kwargs_from_num_teams(num_teams, _scheduling_func)
+        kwargs = cdrr.get_kwargs_from_num_teams(num_teams, _scheduling_func)
 
         assert kwargs["num_teams"] == num_teams
         assert kwargs["team_names"] == list(range(num_teams))
-        assert kwargs["schedule"] == list(range(num_teams))
+        assert kwargs["first_schedule"] == list(range(num_teams))
 
 
 def test_get_kwargs_from_team_names():
@@ -31,19 +31,19 @@ def test_get_kwargs_from_team_names():
         return []
 
     for team_names in [["a", "b", "c"], (0, 1, 2)]:
-        kwargs = csrr.get_kwargs_from_team_names(team_names, _scheduling_func)
+        kwargs = cdrr.get_kwargs_from_team_names(team_names, _scheduling_func)
 
         assert kwargs["num_teams"] == len(team_names)
         assert kwargs["team_names"] == list(team_names)
-        assert kwargs["schedule"] == []
+        assert kwargs["first_schedule"] == []
 
     def _scheduling_func(integer):
         return [((i, i), ) for i in range(integer)]
 
     for team_names in [["a", "b", "c"], [0, 1, 2]]:
 
-        kwargs = csrr.get_kwargs_from_team_names(team_names, _scheduling_func)
+        kwargs = cdrr.get_kwargs_from_team_names(team_names, _scheduling_func)
 
         assert kwargs["num_teams"] == len(team_names)
         assert kwargs["team_names"] == team_names
-        assert kwargs["schedule"] == [((i, i), ) for i in team_names]
+        assert kwargs["first_schedule"] == [((i, i), ) for i in team_names]

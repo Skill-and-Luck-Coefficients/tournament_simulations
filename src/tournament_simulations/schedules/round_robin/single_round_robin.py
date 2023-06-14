@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import random
 from dataclasses import dataclass
-from typing import Iterable, Iterator
+from typing import Callable, Iterable, Iterator
 
+from ..randomize import Option, RandomizeSchedule
+from ..utils.scheduling_types import Round, Team
 from . import create_single_round_robin as create
-from .utils.types import Round, Team
 
 
 @dataclass
@@ -21,6 +21,9 @@ class SingleRoundRobin:
         num_teams: int
             Number of teams in the round-robin tournament
 
+        team_names: list[Team]
+            Teams namess
+
         schedule: list[tuple[tuple[Team, Team], ...]
             Single round-robin schedule in which:
                 1) Rounds are tuple[Match, ...]
@@ -31,11 +34,14 @@ class SingleRoundRobin:
     """
 
     num_teams: int
+    team_names: list[Team]
     schedule: list[Round]
 
     @classmethod
     def from_num_teams(
-        cls, num_teams: int, randomize_teams: bool = True
+        cls,
+        num_teams: int,
+        scheduling_func: str | Callable[[int], list[Round]] = "circle",
     ) -> SingleRoundRobin:
 
         """
@@ -44,7 +50,7 @@ class SingleRoundRobin:
         You can think of it as the the index position for
         a list with team names.
 
-        Algorithm:
+        Default Algorithm:
             https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
 
         -----
@@ -52,33 +58,42 @@ class SingleRoundRobin:
             num_teams: int
                 Number of teams
 
-            randomize_teams: bool = True
-                Whether or not teams should be randomized.
+            scheduling_func: str | Callable[[int], list[Round]] = "circle"
 
-                If False, default ordering of the scheduling algorithm will be used.
+                Function responsible for creating a schedule.
 
-        -----
-        Remark:
-            There will always be some randomness:
-                1) Round ordering is shuffled in the schedule.
+                Some methods are implemented, so you can use strings to call them.
+                    Options: "circle".
 
-                2) In-match team ordering (who is home and who is away) is also random.
+                You can also provide a function.
+                    Input:
+                        int
+                            number of teams as a parameter.
+
+                    Output:
+                        list[
+                            tuple[  # Round
+                                tuple[Team, Team],  # Match
+                                ...
+                            ]
+                        ]
+                            A tournament Schedule
         """
-        parameters = create.get_kwargs_from_num_teams(num_teams, randomize_teams)
+        parameters = create.get_kwargs_from_num_teams(num_teams, scheduling_func)
         return cls(**parameters)
 
     @classmethod
     def from_team_names(
         cls,
         team_names: Iterable[Team],
-        randomize_teams: bool = True,
+        scheduling_func: str | Callable[[int], list[Round]] = "circle",
     ) -> SingleRoundRobin:
 
         """
         In this case, a team will be whatever was passed as its name.
             i-th team will be represented by team_names[i]
 
-        Algorithm:
+        Default Algorithm:
             https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
 
         -----
@@ -86,22 +101,32 @@ class SingleRoundRobin:
             team_names: Iterable[Team]
                 Data that represents teams.
 
-            randomize_teams: bool = True
-                Whether or not teams should be randomized.
-                If False, default ordering of the scheduling algorithm will be used.
+            scheduling_func: str | Callable[[int], list[Round]] = "circle"
 
-        -----
-        Remark:
-            There will always be some randomness:
-                1) Round ordering is shuffled in the schedule.
+                Function responsible for creating a schedule.
 
-                2) In-match team ordering (who is home and who is away) is also random.
+                Some methods are implemented, so you can use strings to call them.
+                    Options: "circle".
+
+                You can also provide a function.
+                    Input:
+                        int
+                            number of teams as a parameter.
+
+                    Output:
+                        list[
+                            tuple[  # Round
+                                tuple[Team, Team],  # Match
+                                ...
+                            ]
+                        ]
+                            A tournament Schedule
         """
-        parameters = create.get_kwargs_from_team_names(team_names, randomize_teams)
+        parameters = create.get_kwargs_from_team_names(team_names, scheduling_func)
         return cls(**parameters)
 
     def get_full_schedule(
-        self, num_schedules: int, randomize_rounds: bool = True
+        self, num_schedules: int, to_randomize: Option | Iterable[Option] | None = "all"
     ) -> Iterator[Round]:
 
         """
@@ -113,9 +138,23 @@ class SingleRoundRobin:
             num_schedules: int
                 Number of times schedule should be concatenated.
 
-            randomize_rounds: bool = True
-                If True, order of rounds will be randomized in each schedule.
+            to_randomize: Option | Iterable[Option] | None = "all"
 
+                What should be randomized.
+
+                If it is an empty iterable or None, a copy of schedule will be returned.
+
+                Option
+                    "teams":
+                        Randomizes what matches each team plays.
+                    "home_away":
+                        Randomizes which team played as home-team.
+                    "matches":
+                        Randomizes order of matches for each round.
+                    "rounds":
+                        Randomizes order of rounds in the schedule.
+                    "all":
+                        Equivalent to ["teams", "home_away", "matches", "rounds"]
         ----
         Returns:
             Iterator[Round]
@@ -141,11 +180,7 @@ class SingleRoundRobin:
             -> Notice that the 1st single-round-robin rounds were shuffled,
             as were the 2nd's.
         """
+        rand_schedule = RandomizeSchedule(self.schedule, self.team_names)
+
         for _ in range(num_schedules):
-
-            copy_schedule = self.schedule.copy()
-
-            if randomize_rounds:
-                random.shuffle(copy_schedule)
-
-            yield from copy_schedule
+            yield from rand_schedule.randomize(to_randomize)

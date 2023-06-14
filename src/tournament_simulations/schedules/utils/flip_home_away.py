@@ -1,4 +1,4 @@
-from .types import Round
+from .scheduling_types import Round
 
 
 def flip_home_away_in_schedule(schedule: list[Round]) -> list[Round]:

@@ -100,61 +100,69 @@ Simulate results given one of the data structures ([Data Structures](#data-struc
 
 Simulations can be tournament-wide or match-wide:
 
-- **tournament-wide**: All matches in a tournament will use the same probability tuple, i.e., (probability home team win, probability draw, probability away team win).
+**tournament-wide**: All matches in a tournament will use the same probability tuple, i.e., (probability home team win, probability draw, probability away team win).
 
-- **match_wide**: Each match should have its own probability tuple.
-
-Classes:
+**match_wide**: Each match should have its own probability tuple.
 
 - `simulations.SimulateMatches`: simulate `data_structues.Matches`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
     - Definition/documentation in `src/tournament_simulations/simulations/simulate_matches.py`
+
 - `simualtions.SimulatePointsPerMatch`: simulate `data_structues.PointsPerMatch`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`
     - Definition/documentation in `src/tournament_simulations/simulations/simulate_points_per_match.py`
+
+### **Scheduling Algorithms**
+
+- `schedules.algorithms.CircleMethod`
+    - Contains method to create a single round-robin schedule: `.generate_schedule(...)`
+    - Algorithm: https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
+    - Definition/documentation in `src/tournament_simulations/schedules/algorithms/circle_method.py`
+
+### **Schedule Randomization**
+
+- `schedules.randomize.RandomizeSchedule`
+    - Contains method to randomize a schedule: `.randomize(...)`
+    - Definition/documentation in `src/tournament_simulations/schedules/randomize/randomize_schedule.py`
+
+- `schedules.randomize.randomize_functions.<function_name>`
+    - File with specific randomization functions.
+        - All these functions can be accessed through `RandomizeSchedule`.
+    - Definition/documentation in `src/tournament_simulations/schedules/randomize/randomize_functions.py`
 
 ### **Round-Robin Schedule Creation**
 
 Given either the number of teams or a list of team names, creates a random single/double round-robin scheduler. It can create long tournaments by concatenating round-robin schedules together.
 
-Algorithm: https://en.wikipedia.org/wiki/Round-robin_tournament#Circle_method
-
-Classes:
-
 - `schedules.round_robin.SingleRoundRobin`
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
     - Definition/documentation in `src/tournament_simulations/schedules/round_robin/single_round_robin.py`
+
 - `schedules.round_robin.DoubleRoundRobin`
     - Contains a method to create long tournaments: `.get_full_schedule(...)`
     - Definition/documentation in`src/tournament_simulations/schedules/round_robin/double_round_robin.py`
 
-Functions:
+### **Schedule Utilities**
 
-- `schedules.round_robin.generate_schedule`
-    - Create a single round-robin schedule with the circle-method.
-    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/circle_method.py`
-
-- `schedules.round_robin.convert_list_of_rounds_to_dataframe`
+- `schedules.convert_list_of_rounds_to_dataframe`
     - Utility function that easily converts list of rounds to a dataframe compatible with `data_structures.Matches`.
-    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/utils/convert_rounds_to_dataframe.py`
+    - Definition/documentation in `src/tournament_simulations/schedules/utils/convert_rounds_to_dataframe.py`
 
-- `rename_teams_in_rounds`
+- `schedules.rename_teams_in_rounds`
     - If teams are integers, this function allows you to rename them.
-    - Definition/documentation in `src/tournament_simulations/schedules/round_robin/utils/rename_teams.py`
+    - Definition/documentation in `src/tournament_simulations/schedules/utils/rename_teams.py`
 
-### **Tournaments Permutations**
+### **Real Tournaments Permutations**
 
 Permute tournament matches (Matches [data structure](#data-structures)) following a valid tournament schedule.
 
 "Valid" in this context means that all matches from the original tournament must be in the schedule. 
 
-Classes:
-
-- `schedules.permutation.TournamentSchedule`
+- `permutations.TournamentSchedule`
     - Can be easily created from tournament scheduling functions.
     - Definition/documentation in `src/tournament_simulations/schedules/permutation/tournament_schedule.py`
 
-- `schedules.permutation.MatchDateNumbers`
+- `permutations.MatchDateNumbers`
     - Useful to randomize the order of matches between a team-pair: `.create_shuffled_copy()`.
     - Definition/documentation in `src/tournament_simulations/schedules/permutation/match_date_numbers.py`
 

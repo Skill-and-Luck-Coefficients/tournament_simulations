@@ -1,6 +1,6 @@
 import pandas as pd
 
-import tournament_simulations.schedules.permutation.ordered_index as oi
+import tournament_simulations.permutations.ordered_index as oi
 
 
 def test_to_list():

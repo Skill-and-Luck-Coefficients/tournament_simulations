@@ -1,6 +1,6 @@
 import pandas as pd
 
-import tournament_simulations.schedules.permutation.tournament_schedule as ts
+import tournament_simulations.permutations.tournament_schedule as ts
 
 
 def test_from_functions_simple():

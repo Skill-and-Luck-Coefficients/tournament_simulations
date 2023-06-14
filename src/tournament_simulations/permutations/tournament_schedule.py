@@ -5,11 +5,11 @@ from typing import Callable, Mapping, TypeVar
 
 import pandas as pd
 
-import tournament_simulations.schedules.round_robin as rr
 import tournament_simulations.utils.series_of_functions as sof
+from tournament_simulations.schedules import Round
 
 InputT = TypeVar("InputT")
-SchedulingFunc = Callable[[InputT], list[rr.types.Round]]
+SchedulingFunc = Callable[[InputT], list[Round]]
 
 
 @dataclass

@@ -2,7 +2,7 @@ import random
 
 import pandas as pd
 
-import tournament_simulations.schedules.permutation.match_date_numbers as md
+import tournament_simulations.permutations.match_date_numbers as md
 
 
 def test_create_shuffled_matches_dates_copy():

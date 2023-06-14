@@ -1,6 +1,6 @@
 import pandas as pd
 
-import tournament_simulations.schedules.round_robin.utils.convert_rounds_to_dataframe as crd
+import tournament_simulations.schedules.utils.convert_rounds_to_dataframe as crd
 
 
 def test_convert_list_of_rounds_to_dataframe():

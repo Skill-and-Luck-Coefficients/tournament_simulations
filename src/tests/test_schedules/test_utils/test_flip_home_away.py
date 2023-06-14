@@ -1,4 +1,4 @@
-import tournament_simulations.schedules.round_robin.utils.flip_home_away as fha
+import tournament_simulations.schedules.utils.flip_home_away as fha
 
 
 def test_flip_home_away_in_schedule_first():

@@ -2,9 +2,9 @@ from typing import Iterator
 
 import pandas as pd
 
-import tournament_simulations.schedules.round_robin as rr
 from tournament_simulations.data_structures.matches import Id
 from tournament_simulations.logs import log, tournament_simulations_logger
+from tournament_simulations.schedules import Round
 
 from .match_date_numbers import MatchDateNumbers
 from .tournament_schedule import TournamentSchedule
@@ -14,7 +14,7 @@ KwargsPI = dict[str, pd.Series]
 
 
 def _generate_all_indexes_one_id(
-    rounds: Iterator[rr.types.Round], dates_numbers: pd.Series, id_: Id
+    rounds: Iterator[Round], dates_numbers: pd.Series, id_: Id
 ) -> list[MatchIndexWithTeams]:
 
     # date_number is a mapping of (home, away) pairs to lists
@@ -43,7 +43,7 @@ def _generate_matches_permutation_index_one_id(
 ) -> list[MatchIndexWithTeams]:
 
     id_: Id = schedule.name
-    rounds: Iterator[rr.types.Round] = schedule["schedule"]
+    rounds: Iterator[Round] = schedule["schedule"]
     dates_numbers: pd.Series = id_to_matches_dates.loc[id_]
 
     return _generate_all_indexes_one_id(rounds, dates_numbers, id_)

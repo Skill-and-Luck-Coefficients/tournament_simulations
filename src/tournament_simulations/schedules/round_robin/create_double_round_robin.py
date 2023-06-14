@@ -1,26 +1,24 @@
-from typing import Iterable
+from typing import Callable, Iterable
 
 from tournament_simulations.logs import log, tournament_simulations_logger
 
+from ..utils.scheduling_types import Round, Team
 from .single_round_robin import SingleRoundRobin
-from .utils.rename_teams import rename_teams_in_rounds
-from .utils.types import Team
 
-KwargsDRR = dict[str, int | SingleRoundRobin]
+KwargsDRR = dict[str, int | list[Team] | list[Round]]
 
 
 @log(tournament_simulations_logger.info)
 def get_kwargs_from_num_teams(
     num_teams: int,
-    randomize_teams: bool,
+    scheduling_func: str | Callable[[int], list[Round]],
 ) -> KwargsDRR:
 
     """
     Create a double round-robin schedule for a tournament with num_teams teams.
 
-    Second portion has the same rounds as the first one, but they are shuffled.
-
-    Each (home, away) match in the first portion will be (away, home) in the second.
+    Second portion has the same rounds as the first one, but they are flipped:
+        Each (home, away) match in the first portion will be (away, home) in the second.
 
     -----
     Parameters:
@@ -28,22 +26,43 @@ def get_kwargs_from_num_teams(
         num_teams: int
             Number of teams the schedule should consider.
 
+        scheduling_func: str | Callable[[int], list[Round]] = "circle"
+
+            Function responsible for creating a schedule.
+
+            Some methods are implemented, so you can use strings to call them.
+                Options: "circle".
+
+            You can also provide a function.
+                Input:
+                    int
+                        number of teams as a parameter.
+
+                Output:
+                    list[
+                        tuple[  # Round
+                            tuple[Team, Team],  # Match
+                            ...
+                        ]
+                    ]
+                        A tournament Schedule
+
     ------
     Returns:
 
         Kwargs parameters for DoubleRoundRobin:
             "num_teams": number of teams
 
-            "first_schedule": schedule for a single round-robin tournament.
+            "team_names": team names
 
-            "second_schedule": complementary schedule.
-                (home, away) from the first round-robin are flipped to (away, home)
+            "first_schedule": schedule for a single round-robin tournament.
     """
 
-    single_rr = SingleRoundRobin.from_num_teams(num_teams, randomize_teams)
+    single_rr = SingleRoundRobin.from_num_teams(num_teams, scheduling_func)
 
     return {
         "num_teams": single_rr.num_teams,
+        "team_names": single_rr.team_names,
         "first_schedule": single_rr.schedule,
     }
 
@@ -51,15 +70,14 @@ def get_kwargs_from_num_teams(
 @log(tournament_simulations_logger.info)
 def get_kwargs_from_team_names(
     team_names: Iterable[Team],
-    randomize_teams: bool,
+    scheduling_func: str | Callable[[int], list[Round]],
 ) -> KwargsDRR:
 
     """
     Create a double round-robin schedule for a tournament with teams named "team_names".
 
-    Second portion has the same rounds as the first one, but they are shuffled.
-
-    Each (home, away) match in the first portion will be (away, home) in the second.
+    Second portion has the same rounds as the first one, but they are flipped:
+        Each (home, away) match in the first portion will be (away, home) in the second.
 
     -----
     Parameters:
@@ -68,24 +86,41 @@ def get_kwargs_from_team_names(
             Team names.
                 i-th team is represented by team_names[i].
 
+        scheduling_func: str | Callable[[int], list[Round]] = "circle"
+
+            Function responsible for creating a schedule.
+
+            Some methods are implemented, so you can use strings to call them.
+                Options: "circle".
+
+            You can also provide a function.
+                Input:
+                    int
+                        number of teams as a parameter.
+
+                Output:
+                    list[
+                        tuple[  # Round
+                            tuple[Team, Team],  # Match
+                            ...
+                        ]
+                    ]
+                        A tournament Schedule
+
     ------
     Returns:
 
         Kwargs parameters for DoubleRoundRobin:
             "num_teams": number of teams
 
+            "team_names": team names
+
             "first_schedule": schedule for a single round-robin tournament.
-
-            "second_schedule": complementary schedule.
-                (home, away) from the first round-robin are flipped to (away, home)
     """
-
-    params_teams_as_int = get_kwargs_from_num_teams(len(team_names), randomize_teams)
-
-    first_schedule = params_teams_as_int["first_schedule"]
-    first_schedule_generator = rename_teams_in_rounds(first_schedule, team_names)
+    single_rr = SingleRoundRobin.from_team_names(team_names, scheduling_func)
 
     return {
-        "num_teams": params_teams_as_int["num_teams"],
-        "first_schedule": list(first_schedule_generator),
+        "num_teams": single_rr.num_teams,
+        "team_names": single_rr.team_names,
+        "first_schedule": single_rr.schedule,
     }
