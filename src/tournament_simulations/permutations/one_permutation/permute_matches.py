@@ -6,8 +6,8 @@ import pandas as pd
 from tournament_simulations.data_structures.matches import DateNumber, Matches
 from tournament_simulations.logs import log, tournament_simulations_logger
 
+from ..utils.types import MatchIndexWithTeams
 from .ordered_index import OrderedIndex
-from .utils.types import MatchIndexWithTeams
 
 
 def _index_matches_appropriately(

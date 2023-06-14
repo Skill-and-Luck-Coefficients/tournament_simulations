@@ -1,16 +1,12 @@
 """
-Module containing functions and classes responsible for creating
-reordering tournament's matches.
+Module containing functions and classes responsible for
+reordering tournament matches.
 """
 
-from .match_date_numbers import MatchDateNumbers
-from .ordered_index import OrderedIndex
-from .permute_matches import PermuteMatches
-from .tournament_schedule import TournamentSchedule
+from .matches_permutations import MatchesPermutations
+from .tournament_scheduler import TournamentScheduler
 
 __all__ = [
-    "MatchDateNumbers",
-    "OrderedIndex",
-    "PermuteMatches",
-    "TournamentSchedule",
+    "MatchesPermutations",
+    "TournamentScheduler",
 ]

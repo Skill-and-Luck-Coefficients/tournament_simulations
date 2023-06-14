@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-import tournament_simulations.permutations.permute_matches as pm
+import tournament_simulations.permutations.one_permutation.permute_matches as pm
 
 
 @pytest.fixture

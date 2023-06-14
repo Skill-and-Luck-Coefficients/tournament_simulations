@@ -1,6 +1,6 @@
 import pandas as pd
 
-import tournament_simulations.permutations.tournament_schedule as ts
+import tournament_simulations.permutations.tournament_scheduler as ts
 
 
 def test_from_functions_simple():
@@ -22,8 +22,8 @@ def test_from_functions_simple():
         name="schedule"
     )
 
-    result = ts.TournamentSchedule.from_functions(func_schedule, id_to_num_teams)
-    assert result.series.equals(expected)
+    scheduler = ts.TournamentScheduler(func_schedule, id_to_num_teams)
+    assert scheduler.generate_schedule().series.equals(expected)
 
     id_to_team_names = pd.Series(
         index=["1", "0"],
@@ -42,8 +42,8 @@ def test_from_functions_simple():
         name="schedule"
     )
 
-    result = ts.TournamentSchedule.from_functions(func_schedule, id_to_team_names)
-    assert result.series.equals(expected)
+    scheduler = ts.TournamentScheduler(func_schedule, id_to_team_names)
+    assert scheduler.generate_schedule().series.equals(expected)
 
 
 def test_from_num_teams_complex():
@@ -72,8 +72,8 @@ def test_from_num_teams_complex():
         name="schedule"
     )
 
-    result = ts.TournamentSchedule.from_functions(id_to_func_schedule, id_to_num_teams)
-    assert result.series.equals(expected)
+    scheduler = ts.TournamentScheduler(id_to_func_schedule, id_to_num_teams)
+    assert scheduler.generate_schedule().series.equals(expected)
 
     id_to_team_names = pd.Series(
         index=["1", "0", "2"],
@@ -99,5 +99,5 @@ def test_from_num_teams_complex():
         name="schedule"
     )
 
-    result = ts.TournamentSchedule.from_functions(id_to_func_schedule, id_to_team_names)
-    assert result.series.equals(expected)
+    scheduler = ts.TournamentScheduler(id_to_func_schedule, id_to_team_names)
+    assert scheduler.generate_schedule().series.equals(expected)

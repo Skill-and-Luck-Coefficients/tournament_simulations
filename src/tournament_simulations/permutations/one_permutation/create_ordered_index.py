@@ -6,9 +6,9 @@ from tournament_simulations.data_structures.matches import Id
 from tournament_simulations.logs import log, tournament_simulations_logger
 from tournament_simulations.schedules import Round
 
+from ..utils.types import MatchIndexWithTeams
 from .match_date_numbers import MatchDateNumbers
 from .tournament_schedule import TournamentSchedule
-from .utils.types import MatchIndexWithTeams
 
 KwargsPI = dict[str, pd.Series]
 
@@ -52,7 +52,7 @@ def _generate_matches_permutation_index_one_id(
 def _get_kwargs(
     id_to_permutation_schedule: pd.Series,
     id_to_matches_dates: pd.Series,
-) -> pd.Series:
+) -> dict[str, pd.Series]:
 
     return {
         "series": id_to_permutation_schedule.to_frame("schedule")

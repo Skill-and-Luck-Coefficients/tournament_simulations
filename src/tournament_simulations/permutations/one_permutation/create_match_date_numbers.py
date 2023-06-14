@@ -3,7 +3,7 @@ import pandas as pd
 from tournament_simulations.data_structures.matches import Matches
 from tournament_simulations.logs import log, tournament_simulations_logger
 
-KwargsMD = dict[str, pd.DataFrame]
+KwargsMD = dict[str, pd.Series]
 
 
 def _get_date_numbers_per_match(matches: Matches) -> pd.Series:

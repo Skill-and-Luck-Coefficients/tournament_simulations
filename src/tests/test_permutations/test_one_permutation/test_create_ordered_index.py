@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-import tournament_simulations.permutations.create_ordered_index as coi
+import tournament_simulations.permutations.one_permutation.create_ordered_index as coi
 
 
 def test_generate_all_indexes_one_id():

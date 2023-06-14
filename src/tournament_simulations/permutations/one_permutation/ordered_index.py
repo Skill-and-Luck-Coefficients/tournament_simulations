@@ -4,10 +4,10 @@ from dataclasses import dataclass
 
 import pandas as pd
 
+from ..utils.types import MatchIndexWithTeams
 from .create_ordered_index import get_kwargs_from_schedule__date_number
 from .match_date_numbers import MatchDateNumbers
 from .tournament_schedule import TournamentSchedule
-from .utils.types import MatchIndexWithTeams
 
 
 @dataclass

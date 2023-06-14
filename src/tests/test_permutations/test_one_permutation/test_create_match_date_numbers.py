@@ -1,7 +1,7 @@
 import pandas as pd
 
 import tournament_simulations.data_structures as ds
-import tournament_simulations.permutations.create_match_date_numbers as cmd
+import tournament_simulations.permutations.one_permutation.create_match_date_numbers as cmd
 
 
 def test_get_date_numbers_per_match():

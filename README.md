@@ -158,22 +158,14 @@ Permute tournament matches (Matches [data structure](#data-structures)) followin
 
 "Valid" in this context means that all matches from the original tournament must be in the schedule. 
 
-- `permutations.TournamentSchedule`
-    - Can be easily created from tournament scheduling functions.
-    - Definition/documentation in `src/tournament_simulations/schedules/permutation/tournament_schedule.py`
+- `permutations.TournamentScheduler`
+    - Scheduler for tournaments: `.generate_schedule(...)`
+    - Allows the creation of different kinds of schedules for each tournaments.
+    - Definition/documentation in `src/tournament_simulations/permutations/tournament_schedule.py`
 
-- `permutations.MatchDateNumbers`
-    - Useful to randomize the order of matches between a team-pair: `.create_shuffled_copy()`.
-    - Definition/documentation in `src/tournament_simulations/schedules/permutation/match_date_numbers.py`
-
-- `schedules.permutation.OrderedIndex`
-    - Stores permuted index for each tournament.
-    - Can be created from `TournamentSchedule` and `MatchDateNumbers`.
-    - Definition/documentation in `src/tournament_simulations/schedules/permutation/ordered_index.py`
-
-- `schedules.permutation.PermuteMatches`
-    - Contains a method to permute `data_structures.Matches` given an `OrderedIndex`: `.permute_matches(...)`
-    - Definition/documentation in `src/tournament_simulations/schedules/permutation/permute_matches.py`
+- `permutations.MatchesPermutations`
+    - Contains a method to create n permutations for all tournaments: `.create_n_permutations(...)`
+    - Definition/documentation in `src/tournament_simulations/permutations/matches_permutations.py`
 
 ## **Logs**
 
