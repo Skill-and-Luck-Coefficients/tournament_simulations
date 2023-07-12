@@ -84,7 +84,9 @@ def get_kwargs_from_matches(matches: Matches) -> KwargsMD:
     """
 
     date_numbers_per_match = _get_date_numbers_per_match(matches)
-    max_match_count_per_id = matches.home_vs_away_count_per_id.groupby("id").max()
+
+    count_per_id = matches.home_vs_away_count_per_id
+    max_match_count_per_id = count_per_id.groupby("id", observed=True).max()
 
     return {
         "series": _fill_date_numbers_per_match_per_id(
