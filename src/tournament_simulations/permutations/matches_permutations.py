@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Iterable, Sequence
 
 import pandas as pd
 
@@ -40,8 +40,8 @@ class MatchesPermutations:
     @log(tournament_simulations_logger.info)
     def create_n_permutations(
         self,
-        n: int,
-        date_numbers: Sequence[int] | pd.Series | None = None
+        n: int | Iterable[str] | Iterable[int],
+        date_numbers: Sequence[int] | pd.Series | None = None,
     ) -> Matches:
 
         """
@@ -55,8 +55,10 @@ class MatchesPermutations:
         ----
         Parameters:
 
-            n: int
-                Number of permutations
+            n: int | Iterable[str] | Iterable[int]
+                int: Number of permutations
+                    Each number from 0 to n-1 are the identifiers
+                Iterable[str]:  List of identifiers
 
             date_numbers: Sequence[int] | pd.Series | None = None
                 "date number" index for all new tournaments.
@@ -97,10 +99,13 @@ class MatchesPermutations:
         """
         permutations: list[pd.DataFrame] = []
 
-        for i in range(n):
+        if isinstance(n, int):
+            n = range(n)
+
+        for identifier in n:
 
             def _rename_id(id_: str) -> str:
-                return f"{id_}@{i}"
+                return f"{id_}@{identifier}"
 
             shuffled_date_numbers = self._matches_date_numbers.create_shuffled_copy()
             permuted_schedule = self.scheduler.generate_schedule()
