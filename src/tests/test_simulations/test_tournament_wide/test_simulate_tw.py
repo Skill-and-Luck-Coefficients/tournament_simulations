@@ -6,10 +6,53 @@ import tournament_simulations.simulations.tournament_wide.simulate as simul
 
 
 @pytest.fixture
-def id_to_probabilities():
+def id_to_probabilities_winner():
 
     return pd.Series(
-        data=[(0, 0, 1), (1, 0, 0), (0, 1, 0)],
+        data=[
+            {"h": 0, "d": 0, "a": 1},
+            {"h": 1, "d": 0, "a": 0},
+            {"h": 0, "d": 1, "a": 0},
+        ],
+        index=pd.Index(["1", "2", "3"], name="id"),
+    )
+
+
+@pytest.fixture
+def id_to_probabilities_winner_result():
+
+    return pd.Series(
+        data=[
+            {"3-1": 0, "3-2": 0, "3-0": 1},
+            {"3-1": 1, "3-2": 0, "3-0": 0},
+            {"3-1": 0, "3-2": 1, "3-0": 0},
+        ],
+        index=pd.Index(["1", "2", "3"], name="id"),
+    )
+
+
+@pytest.fixture
+def id_to_probabilities_ppm():
+
+    return pd.Series(
+        data=[
+            {(3, 0): 0, (1, 1): 0, (0, 3): 1},
+            {(3, 0): 1, (1, 1): 0, (0, 3): 0},
+            {(3, 0): 0, (1, 1): 1, (0, 3): 0},
+        ],
+        index=pd.Index(["1", "2", "3"], name="id"),
+    )
+
+
+@pytest.fixture
+def id_to_probabilities_ppm_second():
+
+    return pd.Series(
+        data=[
+            {(2, 1): 0, (0, 0): 1, (3, 3): 0},
+            {(2, 1): 1, (0, 0): 0, (3, 3): 0},
+            {(2, 1): 0, (0, 0): 0, (3, 3): 1},
+        ],
         index=pd.Index(["1", "2", "3"], name="id"),
     )
 
@@ -43,26 +86,13 @@ def data_to_join_second():
         {
             "id": ["1", "1", "1", "1", "2", "2", "2", "2", "3", "3", "3", "3"],
             "date number": [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
-            "team": [
-                "A",
-                "B",
-                "B",
-                "C",
-                "b",
-                "a",
-                "c",
-                "a",
-                "2",
-                "1",
-                "1",
-                "2",
-            ],
+            "team": ["A", "B", "B", "C", "b", "a", "c", "a", "2", "1", "1", "2"],
         }
     ).set_index(["id", "date number"])
 
 
 def test_simulate_tournament_wide_template_first(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_winner: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_first: pd.DataFrame,
 ):
@@ -70,7 +100,8 @@ def test_simulate_tournament_wide_template_first(
     # apply func
     def apply_func(prob__num_matches, num_simulations):
         prob, num_matches = prob__num_matches
-        return np.array([[*prob, num_simulations]] * num_matches)
+        prob_values = [prob[key] for key in ["h", "d", "a"]]
+        return np.array([[*prob_values, num_simulations]] * num_matches)
 
     num_simulations = 5
     expected = pd.DataFrame(
@@ -84,9 +115,10 @@ def test_simulate_tournament_wide_template_first(
         }
     ).set_index(["id", "date number"])
 
-    joined_id_maps = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    joined_id_maps = pd.concat([id_to_probabilities_winner, id_to_num_matches], axis=1)
     id_to_prob__num_matches = pd.Series(
-        joined_id_maps.itertuples(index=False, name=None), index=joined_id_maps.index
+        data=joined_id_maps.itertuples(index=False, name=None),
+        index=joined_id_maps.index,
     )
 
     simulations = simul._simulate_tournament_wide_template(
@@ -97,32 +129,34 @@ def test_simulate_tournament_wide_template_first(
 
 
 def test_simulate_tournament_wide_template_second(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_winner: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_second: pd.DataFrame,
 ):
 
     # apply func
-    def apply_func(prob, num_simulations):
+    def apply_func(prob__num_matches, num_simulations):
+        prob, num_matches = prob__num_matches
         return np.array(
             [
-                [num_simulations, num_simulations * 2],
+                [sorted(prob.keys()), sorted(prob.values())],
                 [num_simulations * 3, num_simulations * 4],
             ]
-            * num_simulations
+            * num_matches,
+            dtype=object
         )
 
-    num_simulations = 2
+    num_simulations = 3
     expected = pd.DataFrame(
         {
             "id": ["1", "1", "1", "1", "2", "2", "2", "2", "3", "3", "3", "3"],
             "date number": [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
-            0: [num_simulations, num_simulations * 3] * 6,
-            1: [num_simulations * 2, num_simulations * 4] * 6,
+            0: [["a", "d", "h"], num_simulations * 3] * 6,
+            1: [[0, 0, 1], num_simulations * 4] * 6,
         }
     ).set_index(["id", "date number"])
 
-    joined_id_maps = pd.concat([id_to_probabilities, id_to_num_matches], axis=1)
+    joined_id_maps = pd.concat([id_to_probabilities_winner, id_to_num_matches], axis=1)
     id_to_prob__num_matches = pd.Series(
         joined_id_maps.itertuples(index=False, name=None), index=joined_id_maps.index
     )
@@ -135,7 +169,8 @@ def test_simulate_tournament_wide_template_second(
 
 
 def test_simulate_winners__tournament_wide(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_winner: pd.Series,
+    id_to_probabilities_winner_result: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_first: pd.DataFrame,
 ):
@@ -152,16 +187,25 @@ def test_simulate_winners__tournament_wide(
 
     simulations = simul.simulate_winners__tournament_wide(
         num_simulations,
-        id_to_probabilities,
+        id_to_probabilities_winner,
         id_to_num_matches,
         data_to_join_first.index,
     )
 
     assert simulations.equals(expected)
 
+    simulations = simul.simulate_winners__tournament_wide(
+        num_simulations,
+        id_to_probabilities_winner_result,
+        id_to_num_matches,
+        data_to_join_first.index,
+    )
+
+    assert simulations.equals(expected.replace({"h": "3-1", "d": "3-2", "a": "3-0"}))
+
 
 def test_simulate_points_per_match__tournament_wide(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_ppm: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_second: pd.DataFrame,
 ):
@@ -180,7 +224,35 @@ def test_simulate_points_per_match__tournament_wide(
 
     simulations = simul.simulate_points_per_match__tournament_wide(
         num_simulations,
-        id_to_probabilities,
+        id_to_probabilities_ppm,
+        id_to_num_matches,
+        data_to_join_second.index,
+    )
+
+    assert simulations.equals(expected)
+
+
+def test_simulate_points_per_match__tournament_wide_second(
+    id_to_probabilities_ppm_second: pd.Series,
+    id_to_num_matches: pd.Series,
+    data_to_join_second: pd.DataFrame,
+):
+
+    num_simulations = 4
+    expected = pd.DataFrame(
+        {
+            "id": ["1", "1", "1", "1", "2", "2", "2", "2", "3", "3", "3", "3"],
+            "date number": [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
+            0: [0, 0, 0, 0, 2, 1, 2, 1, 3, 3, 3, 3],
+            1: [0, 0, 0, 0, 2, 1, 2, 1, 3, 3, 3, 3],
+            2: [0, 0, 0, 0, 2, 1, 2, 1, 3, 3, 3, 3],
+            3: [0, 0, 0, 0, 2, 1, 2, 1, 3, 3, 3, 3],
+        }
+    ).set_index(["id", "date number"])
+
+    simulations = simul.simulate_points_per_match__tournament_wide(
+        num_simulations,
+        id_to_probabilities_ppm_second,
         id_to_num_matches,
         data_to_join_second.index,
     )

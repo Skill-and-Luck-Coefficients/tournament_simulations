@@ -55,10 +55,11 @@ class SimulateMatches:
                             Note: i-th simulation (column) is named f"s{i}"
 
             id_to_probabilities: pd.Series | None = None
-                Series mapping each tournament id to the desired probability.
+                Series mapping each tournament id to the desired probabilities.
 
-                Probabilities are a tuple:
-                        (prob home team win, prob draw, prob away team win)
+                Probabilities are a Mapping:
+                    keys: possible results (str)
+                    values: probability for each possible result (float)
 
                 If not provided, probabilities will be taken from self.matches.
                     For each tournament the number of home-team wins, draws and
@@ -79,7 +80,7 @@ class SimulateMatches:
 
         """
         if id_to_probabilities is None:
-            id_to_probabilities = self.matches.probabilities_per_id
+            id_to_probabilities = self.matches.probabilities_per_id()
 
         index = self.matches.df.set_index(["home", "away"], append=True).index
 
@@ -109,8 +110,9 @@ class SimulateMatches:
                 Mapping each match to its probabilities.
                 Index should be in the same order as simulation_index.
 
-                    Probabilities are a tuple:
-                        (prob home team win, prob draw, prob away team win)
+                    Probabilities are a Mapping:
+                        keys: possible results (str)
+                        values: probability for each possible result (float)
 
             num_iteration_simulation: tuple[int, int]
                 Respectively, number of iterations and number of

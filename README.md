@@ -100,9 +100,9 @@ Simulate results given one of the data structures ([Data Structures](#data-struc
 
 Simulations can be tournament-wide or match-wide:
 
-**tournament-wide**: All matches in a tournament will use the same probability tuple, i.e., (probability home team win, probability draw, probability away team win).
+**tournament-wide**: All matches in a tournament will obey the same probabilities.
 
-**match_wide**: Each match should have its own probability tuple.
+**match_wide**: Each match must have its own probabilities.
 
 - `simulations.SimulateMatches`: simulate `data_structues.Matches`
     - Contains methods for both types of simulations: `.tournament_wide(...)` and `.match_wide(...)`

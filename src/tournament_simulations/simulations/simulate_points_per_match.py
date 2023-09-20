@@ -55,10 +55,11 @@ class SimulatePointsPerMatch:
                             Note: i-th simulation (column) is named f"s{i}"
 
             id_to_probabilities: pd.Series | None = None
-                Series mapping each tournament id to the desired probability.
+                Series mapping each tournament id to the desired probabilities.
 
-                Probabilities are a tuple:
-                        (prob home team win, prob draw, prob away team win)
+                Probabilities are a Mapping:
+                    keys: possible results (str)
+                    values: probability for each possible result (float)
 
                 If not provided, probabilities will be taken from self.matches.
                     For each tournament the number of home-team wins, draws and
@@ -79,7 +80,7 @@ class SimulatePointsPerMatch:
 
         """
         if id_to_probabilities is None:
-            id_to_probabilities = self.ppm.probabilities_per_id
+            id_to_probabilities = self.ppm.probabilities_per_id()
 
         return tw.batch_simulate_points_per_match(
             id_to_probabilities=id_to_probabilities,

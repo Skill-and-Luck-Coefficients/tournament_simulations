@@ -7,13 +7,13 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from tournament_simulations.data_structures.utils.types import Probabilities
+from tournament_simulations.data_structures.utils import types
 
 from ..utils.simulate_functions import simulate_points_per_match, simulate_winners
 
 
 def _simulate_match_wide_template(
-    apply_func: Callable[[Probabilities, int], np.ndarray],
+    apply_func: Callable[[types.Probability, int], np.ndarray],
     num_simulations: int,
     id_to_probabilities: pd.Series,
     simulation_index: pd.Index | pd.MultiIndex,
@@ -33,7 +33,7 @@ def simulate_winners__match_wide(
 
     # apply function
     def _simulate_winners_one_match_one_id(
-        probabilities: Probabilities,
+        probabilities: types.ResultProbability,
         num_simulations: int,
     ) -> np.ndarray:
 
@@ -55,7 +55,7 @@ def simulate_points_per_match__match_wide(
 
     # apply function
     def _simulate_points_per_match_one_match_one_id(
-        probabilities: Probabilities,
+        probabilities: types.PontuationProbability,
         num_simulations: int,
     ) -> np.ndarray:
 

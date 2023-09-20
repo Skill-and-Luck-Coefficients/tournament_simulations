@@ -5,10 +5,27 @@ import tournament_simulations.simulations.tournament_wide.batch as batch
 
 
 @pytest.fixture
-def id_to_probabilities():
+def id_to_probabilities_winner():
 
     return pd.Series(
-        data=[(0, 0, 1), (0, 1, 0), (0, 1, 0)],
+        data=[
+            {"h": 0, "d": 0, "a": 1},
+            {"h": 0, "d": 1, "a": 0},
+            {"h": 0, "d": 1, "a": 0},
+        ],
+        index=pd.Index(["1", "2", "3"], name="id"),
+    )
+
+
+@pytest.fixture
+def id_to_probabilities_ppm():
+
+    return pd.Series(
+        data=[
+            {(3, 0): 0, (1, 1): 0, (0, 3): 1},
+            {(3, 0): 0, (1, 1): 1, (0, 3): 0},
+            {(3, 0): 0, (1, 1): 1, (0, 3): 0},
+        ],
         index=pd.Index(["1", "2", "3"], name="id"),
     )
 
@@ -42,26 +59,13 @@ def data_to_join_second():
         {
             "id": ["1", "1", "1", "1", "2", "2", "2", "2", "3", "3", "3", "3"],
             "date number": [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
-            "team": [
-                "A",
-                "B",
-                "B",
-                "C",
-                "b",
-                "a",
-                "c",
-                "a",
-                "2",
-                "1",
-                "1",
-                "2",
-            ],
+            "team": ["A", "B", "B", "C", "b", "a", "c", "a", "2", "1", "1", "2"],
         }
     ).set_index(["id", "date number"])
 
 
 def test_batch_simulate_winners_default(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_winner: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_first: pd.DataFrame,
 ):
@@ -78,7 +82,7 @@ def test_batch_simulate_winners_default(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_winners(
-        id_to_probabilities,
+        id_to_probabilities_winner,
         id_to_num_matches,
         data_to_join_first.index,
         num_iteration_simulation,
@@ -89,7 +93,7 @@ def test_batch_simulate_winners_default(
 
 
 def test_batch_simulate_winners_with_func_after(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_winner: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_first: pd.DataFrame,
 ):
@@ -113,7 +117,7 @@ def test_batch_simulate_winners_with_func_after(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_winners(
-        id_to_probabilities,
+        id_to_probabilities_winner,
         id_to_num_matches,
         data_to_join_first.index,
         num_iteration_simulation,
@@ -124,7 +128,7 @@ def test_batch_simulate_winners_with_func_after(
 
 
 def test_batch_simulate_points_per_match_default(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_ppm: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_second: pd.DataFrame,
 ):
@@ -142,7 +146,7 @@ def test_batch_simulate_points_per_match_default(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_points_per_match(
-        id_to_probabilities,
+        id_to_probabilities_ppm,
         id_to_num_matches,
         data_to_join_second.index,
         num_iteration_simulation,
@@ -153,7 +157,7 @@ def test_batch_simulate_points_per_match_default(
 
 
 def test_batch_simulate_points_per_match_with_func_after_one(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_ppm: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_second: pd.DataFrame,
 ):
@@ -179,7 +183,7 @@ def test_batch_simulate_points_per_match_with_func_after_one(
     ).set_index(["id", "team"])
 
     simulations = batch.batch_simulate_points_per_match(
-        id_to_probabilities,
+        id_to_probabilities_ppm,
         id_to_num_matches,
         data_to_join_second.set_index("team", append=True).index,
         num_iteration_simulation,
@@ -190,7 +194,7 @@ def test_batch_simulate_points_per_match_with_func_after_one(
 
 
 def test_batch_simulate_points_per_match_with_func_after_two(
-    id_to_probabilities: pd.Series,
+    id_to_probabilities_ppm: pd.Series,
     id_to_num_matches: pd.Series,
     data_to_join_second: pd.DataFrame,
 ):
@@ -214,7 +218,7 @@ def test_batch_simulate_points_per_match_with_func_after_two(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_points_per_match(
-        id_to_probabilities,
+        id_to_probabilities_ppm,
         id_to_num_matches,
         data_to_join_second.index,
         num_iteration_simulation,

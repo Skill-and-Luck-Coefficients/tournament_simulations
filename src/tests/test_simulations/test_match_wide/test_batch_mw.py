@@ -5,10 +5,29 @@ import tournament_simulations.simulations.match_wide.batch as batch
 
 
 @pytest.fixture
-def match_to_probabilities():
+def match_to_probabilities_winner():
 
     return pd.Series(
-        data=[(0, 0, 1), (1, 0, 0), (0, 1, 0), (1, 0, 0)],
+        data=[
+            {"h": 0, "d": 0, "a": 1},
+            {"h": 1, "d": 0, "a": 0},
+            {"h": 0, "d": 1, "a": 0},
+            {"h": 1, "d": 0, "a": 0},
+        ],
+        index=["match1", "match2", "match3", "match4"],
+    )
+
+
+@pytest.fixture
+def match_to_probabilities_ppm():
+
+    return pd.Series(
+        data=[
+            {(3, 0): 0, (1, 1): 0, (0, 3): 1},
+            {(3, 0): 1, (1, 1): 0, (0, 3): 0},
+            {(3, 0): 0, (1, 1): 1, (0, 3): 0},
+            {(3, 0): 1, (1, 1): 0, (0, 3): 0},
+        ],
         index=["match1", "match2", "match3", "match4"],
     )
 
@@ -39,7 +58,7 @@ def data_to_join_second():
 
 
 def test_batch_simulate_winners_default(
-    match_to_probabilities: pd.Series, data_to_join_first: pd.DataFrame
+    match_to_probabilities_winner: pd.Series, data_to_join_first: pd.DataFrame
 ):
 
     num_iteration_simulation = (1, 3)
@@ -54,7 +73,7 @@ def test_batch_simulate_winners_default(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_winners(
-        match_to_probabilities,
+        match_to_probabilities_winner,
         data_to_join_first.index,
         num_iteration_simulation,
         func_after_simulation=lambda x: x,
@@ -64,7 +83,7 @@ def test_batch_simulate_winners_default(
 
 
 def test_batch_simulate_winners_with_func_after(
-    match_to_probabilities: pd.Series, data_to_join_first: pd.DataFrame
+    match_to_probabilities_winner: pd.Series, data_to_join_first: pd.DataFrame
 ):
 
     # apply func
@@ -86,7 +105,7 @@ def test_batch_simulate_winners_with_func_after(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_winners(
-        match_to_probabilities,
+        match_to_probabilities_winner,
         data_to_join_first.index,
         num_iteration_simulation,
         func_after_simulation=replace_home_with_away,
@@ -96,7 +115,7 @@ def test_batch_simulate_winners_with_func_after(
 
 
 def test_batch_simulate_points_per_match_default(
-    match_to_probabilities: pd.Series, data_to_join_second: pd.DataFrame
+    match_to_probabilities_ppm: pd.Series, data_to_join_second: pd.DataFrame
 ):
 
     num_iteration_simulation = (1, 3)
@@ -111,7 +130,7 @@ def test_batch_simulate_points_per_match_default(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_points_per_match(
-        match_to_probabilities,
+        match_to_probabilities_ppm,
         data_to_join_second.index,
         num_iteration_simulation,
         func_after_simulation=lambda x: x,
@@ -121,7 +140,7 @@ def test_batch_simulate_points_per_match_default(
 
 
 def test_batch_simulate_points_per_match_with_func_after_one(
-    match_to_probabilities: pd.Series, data_to_join_second: pd.DataFrame
+    match_to_probabilities_ppm: pd.Series, data_to_join_second: pd.DataFrame
 ):
 
     # apply func
@@ -143,7 +162,7 @@ def test_batch_simulate_points_per_match_with_func_after_one(
     ).set_index(["id", "team"])
 
     simulations = batch.batch_simulate_points_per_match(
-        match_to_probabilities,
+        match_to_probabilities_ppm,
         data_to_join_second.set_index("team", append=True).index,
         num_iteration_simulation,
         func_after_simulation=get_rankings,
@@ -153,7 +172,7 @@ def test_batch_simulate_points_per_match_with_func_after_one(
 
 
 def test_batch_simulate_points_per_match_with_func_after_two(
-    match_to_probabilities: pd.Series, data_to_join_second: pd.DataFrame
+    match_to_probabilities_ppm: pd.Series, data_to_join_second: pd.DataFrame
 ):
 
     # apply func
@@ -175,7 +194,7 @@ def test_batch_simulate_points_per_match_with_func_after_two(
     ).set_index(["id", "date number"])
 
     simulations = batch.batch_simulate_points_per_match(
-        match_to_probabilities,
+        match_to_probabilities_ppm,
         data_to_join_second.index,
         num_iteration_simulation,
         func_after_simulation=add_three,

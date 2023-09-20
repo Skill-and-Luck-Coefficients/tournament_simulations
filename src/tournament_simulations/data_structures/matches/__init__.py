@@ -52,15 +52,7 @@
 """
 
 
-from .matches import (
-    DateNumber,
-    HomeAwayWinner,
-    Id,
-    Matches,
-    MatchesDFIndex,
-    Team,
-    Winner,
-)
+from .matches import DateNumber, HomeAwayWinner, Id, Matches, MatchesDFIndex, Team
 
 __all__ = [
     "Matches",
@@ -69,5 +61,4 @@ __all__ = [
     "DateNumber",
     "MatchesDFIndex",
     "Team",
-    "Winner",
 ]

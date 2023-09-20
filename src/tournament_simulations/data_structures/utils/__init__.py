@@ -1,3 +1,3 @@
-from .types import Probabilities
+from . import types
 
-__all__ = ["Probabilities"]
+__all__ = ["types"]

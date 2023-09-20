@@ -26,6 +26,7 @@ def second_matches():
         "home": ["one", "three", "A", "C", "B"],
         "away": ["two", "four", "B", "A", "A"],
         "winner": ["d", "d", "h", "a", "d"],
+        "result": ["1-1", "1-1", "1-0", "0-1", "1-1"],
     }
     df = pd.DataFrame(data=cols).set_index(["id", "date number"])
 
@@ -70,20 +71,44 @@ def test_number_of_matches_per_id_second_matches(second_matches: ds.Matches):
 
 def test_probabilities_per_id_first_matches(first_matches: ds.Matches):
 
-    expected_index = ["1", "2"]
-    expected_data = [(1, 0, 0), (0, 1 / 3, 2 / 3)]
-    expected = pd.Series(expected_data, expected_index)
+    expected_index = pd.Categorical(["1", "2"])
+    expected_data = [
+        {"a": 0, "d": 0, "h": 1},
+        {"a": 2 / 3, "d": 1 / 3, "h": 0},
+    ]
+    expected = pd.Series(expected_data, expected_index, name="probabilities")
 
-    assert first_matches.probabilities_per_id.equals(expected)
+    assert first_matches.probabilities_per_id().equals(expected)
+    assert first_matches.probabilities_per_id(results=None).equals(expected)
+
+    expected_data = [
+        {"d": 0, "h": 1},
+        {"d": 1 / 3, "h": 0},
+    ]
+    expected = pd.Series(expected_data, expected_index, name="probabilities")
+
+    assert first_matches.probabilities_per_id(results=["h", "d"]).equals(expected)
 
 
 def test_probabilities_per_id_second_matches(second_matches: ds.Matches):
 
-    expected_index = ["1", "2"]
-    expected_data = [(0, 1, 0), (1 / 3, 1 / 3, 1 / 3)]
-    expected = pd.Series(expected_data, expected_index)
+    expected_index = pd.Categorical(["1", "2"])
+    expected_data = [
+        {"a": 0, "d": 1, "h": 0},
+        {"a": 1 / 3, "d": 1 / 3, "h": 1 / 3},
+    ]
+    expected = pd.Series(expected_data, expected_index, name="probabilities")
 
-    assert second_matches.probabilities_per_id.equals(expected)
+    assert second_matches.probabilities_per_id().equals(expected)
+
+    expected_data = [
+        {"0-1": 0, "1-0": 0, "1-1": 1},
+        {"0-1": 1 / 3, "1-0": 1 / 3, "1-1": 1 / 3},
+    ]
+    expected = pd.Series(expected_data, expected_index, name="probabilities")
+
+    result = second_matches.probabilities_per_id(column="result", results=None)
+    assert result.equals(expected)
 
 
 def test_home_away_winner_first_matches(first_matches: ds.Matches):
@@ -96,7 +121,7 @@ def test_home_away_winner_first_matches(first_matches: ds.Matches):
     ]
     expected = pd.Series(expected_data, first_matches.df.index)
 
-    assert first_matches.home_away_winner.equals(expected)
+    assert first_matches.home_away_winner().equals(expected)
 
 
 def test_home_away_winner_second_matches(second_matches: ds.Matches):
@@ -110,7 +135,18 @@ def test_home_away_winner_second_matches(second_matches: ds.Matches):
     ]
     expected = pd.Series(expected_data, second_matches.df.index)
 
-    assert second_matches.home_away_winner.equals(expected)
+    assert second_matches.home_away_winner().equals(expected)
+
+    expected_data = [
+        ("one", "two", "1-1"),
+        ("three", "four", "1-1"),
+        ("A", "B", "1-0"),
+        ("C", "A", "0-1"),
+        ("B", "A", "1-1"),
+    ]
+    expected = pd.Series(expected_data, second_matches.df.index)
+
+    assert second_matches.home_away_winner(winner_type="result").equals(expected)
 
 
 def test_home_vs_away_count_per_id_first_matches(first_matches: ds.Matches):

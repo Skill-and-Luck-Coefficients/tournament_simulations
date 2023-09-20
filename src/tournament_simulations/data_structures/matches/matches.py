@@ -1,6 +1,6 @@
 import functools
 from dataclasses import dataclass
-from typing import Literal, NewType
+from typing import Literal, NewType, Sequence
 
 import pandas as pd
 
@@ -13,9 +13,8 @@ DateNumber = NewType("DateNumber", int)
 MatchesDFIndex = tuple[Id, DateNumber]
 
 Team = NewType("Team", str)
-Winner = Literal["h", "d", "a"]
 
-HomeAwayWinner = tuple[Team, Team, Winner]
+HomeAwayWinner = tuple[Team, Team, str]
 
 
 @dataclass
@@ -126,52 +125,6 @@ class Matches:
         )
 
     @functools.cached_property
-    def probabilities_per_id(self) -> pd.Series:
-        """
-        Calculates probabilities of home-team win, draw and away-team win
-        for each tournament separately.
-
-        Each probability is a tuple of floats.
-
-        This property is cached because otherwise it would be called
-        each iteration.
-        """
-        # apply function
-        def _create_probabilities_one_id(
-            df_col: pd.Series,
-        ) -> tuple[float, float, float]:
-
-            num_home_wins: int = (df_col == "h").sum()
-            num_draws: int = (df_col == "d").sum()
-            num_away_wins: int = (df_col == "a").sum()
-
-            num_matches = len(df_col)
-
-            return (
-                num_home_wins / num_matches,  # probability home win
-                num_draws / num_matches,  # probability draw
-                num_away_wins / num_matches,  # probability away win
-            )
-
-        return (
-            self.df.loc[:, "winner"]
-            .groupby("id", observed=True)
-            .apply(_create_probabilities_one_id)
-            .rename("probabilities")
-        )
-
-    @functools.cached_property
-    def home_away_winner(self) -> pd.Series:
-
-        """
-        Creates a series containing tuples (home, away, winner) for all matches.
-        """
-
-        desired_cols = self.df[["home", "away", "winner"]]
-
-        return convert_df_to_series_of_tuples(desired_cols).rename("home away winner")
-
-    @functools.cached_property
     def home_vs_away_count_per_id(self) -> pd.Series:
 
         """
@@ -188,3 +141,70 @@ class Matches:
             .sort_index()  # BUG: it is not sorting after groupby
             .rename("match count")
         )
+
+    def probabilities_per_id(
+        self,
+        column: str = "winner",
+        results: Sequence[str] | None = ("h", "d", "a")
+    ) -> pd.Series:
+        """
+        Calculates probabilities of each result for a given column.
+
+        ----
+        Parameters:
+            column: str
+                Desired column
+
+            results: Sequence[str] | None = ("h", "d", "a")
+                Results to be considered.
+
+                If it is None, it will be set to all unique values for the column.
+
+        Returns
+        -----
+            pd.Series[
+                index = [
+                    "id": str
+                        tournament id
+                ]
+
+                value = [
+                    "probabilities": pd.Series[str, float]
+                        str (result): float (probability)
+                ]
+            ]
+        """
+        # apply function
+        def _create_probabilities_one_id(
+            df_col: pd.Series, results: Sequence[str]
+        ) -> dict[str, float]:
+            return {
+                result: (df_col == result).sum() / len(df_col)
+                for result in results
+            }
+
+        if results is None:
+            results = self.df[column].unique().tolist()
+
+        return (
+            self.df[column]
+            .groupby("id", observed=True)
+            .agg(_create_probabilities_one_id, results=results)
+            .rename("probabilities")
+            .sort_index()
+        )
+
+    def home_away_winner(
+        self, winner_type: Literal["winner", "result"] = "winner"
+    ) -> pd.Series:
+        """
+        Creates a series containing tuples (home, away, winner) for all matches.
+
+        ---
+        Parameters:
+            winner_type: Literal["winner", "result"] = "winner"
+                winner: Which team won, that is, "h", "d" or "a"
+                result: Match result, that is, "{home score}-{away score}"
+        """
+        desired_cols = self.df[["home", "away", winner_type]]
+        return convert_df_to_series_of_tuples(desired_cols).rename("home away winner")

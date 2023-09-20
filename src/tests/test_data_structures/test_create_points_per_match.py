@@ -9,24 +9,36 @@ def test_get_teams_points_per_match_first():
     index = ["1", "1", "2"]
     test = pd.Series(values, index)
 
+    result_to_points = {"h": (3, 0), "d": (1, 1), "a": (0, 3)}
+
     expected_values = [("A", 0), ("B", 3), ("B", 3), ("C", 0), ("a", 1), ("b", 1)]
     expected_index = ["1", "1", "1", "1", "2", "2"]
     expected = pd.Series(expected_values, expected_index)
 
-    assert cppm._get_teams_points_per_match(test).equals(expected)
+    assert cppm._get_teams_points_per_match(test, result_to_points).equals(expected)
+
+    result_to_points = {"h": (2, 1), "d": (0, 0), "a": (1, 2)}
+
+    expected_values = [("A", 1), ("B", 2), ("B", 2), ("C", 1), ("a", 0), ("b", 0)]
+    expected_index = ["1", "1", "1", "1", "2", "2"]
+    expected = pd.Series(expected_values, expected_index)
+
+    assert cppm._get_teams_points_per_match(test, result_to_points).equals(expected)
 
 
 def test_get_teams_points_per_match_second():
 
-    values = [("A", "C", "a"), ("B", "C", "d"), ("a", "d", "a"), ("a", "b", "nalkd")]
+    values = [("A", "C", "2-3"), ("B", "C", "1-1"), ("a", "d", "1-3"), ("a", "b", "n")]
     index = ["1", "1", "2", "2"]
     test = pd.Series(values, index)
 
-    expected_values = [("A", 0), ("C", 3), ("B", 1), ("C", 1), ("a", 0), ("d", 3)]
+    result_to_points = {"2-3": (1, 2), "1-1": (1, 1), "1-3": (0, 3)}
+
+    expected_values = [("A", 1), ("C", 2), ("B", 1), ("C", 1), ("a", 0), ("d", 3)]
     expected_index = ["1", "1", "1", "1", "2", "2"]
     expected = pd.Series(expected_values, expected_index)
 
-    assert cppm._get_teams_points_per_match(test).equals(expected)
+    assert cppm._get_teams_points_per_match(test, result_to_points).equals(expected)
 
 
 def test_create_points_per_match_first():
@@ -40,7 +52,7 @@ def test_create_points_per_match_first():
     }
     test = ds.Matches(
         pd.DataFrame(data=test_cols).set_index(["id", "date number"])
-    ).home_away_winner
+    ).home_away_winner()
 
     expected_cols = {
         "id": ["1", "1", "1", "1", "2", "2", "2", "2", "2", "2"],
@@ -54,7 +66,8 @@ def test_create_points_per_match_first():
         .set_index(["id", "date number"])
     )
 
-    ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
+    result_to_points = {"h": (3, 0), "d": (1, 1), "a": (0, 3)}
+    ppm = cppm.get_kwargs_from_home_away_winner(test, result_to_points)["df"]
     assert ppm.equals(expected)
 
 
@@ -87,10 +100,18 @@ def test_create_points_per_match_second():
             "na",
             "d",
         ],
+        "result": [
+            "3:0",
+            "1:1",
+            "1:1",
+            "0:3",
+            "na",
+            "1:1",
+        ],
     }
     test = ds.Matches(
         pd.DataFrame(data=test_cols).set_index(["id", "date number"])
-    ).home_away_winner
+    ).home_away_winner("result")
 
     expected_cols = {
         "id": ["1", "1", "2", "2", "2", "2", "3", "3", "3", "3"],
@@ -104,5 +125,6 @@ def test_create_points_per_match_second():
         .set_index(["id", "date number"])
     )
 
-    ppm = cppm.get_kwargs_from_home_away_winner(test)["df"]
+    result_to_points = {"3:0": (3, 0), "1:1": (1, 1), "0:3": (0, 3)}
+    ppm = cppm.get_kwargs_from_home_away_winner(test, result_to_points)["df"]
     assert ppm.equals(expected)

@@ -20,11 +20,7 @@ def batch_simulate_winners(
 ) -> pd.DataFrame:
 
     """
-    Simulates who is the winner of all matches.
-
-        "h": home team win
-        "d": draw
-        "a": away team win
+    Simulates the winner (or result) for all matches.
 
     All matches for a tournament will have the same probabilities.
 
@@ -38,8 +34,9 @@ def batch_simulate_winners(
             Mapping each match to its probabilities.
             Index should be in the same order as simulation_index.
 
-                Probabilities are a tuple:
-                    (prob home team win, prob draw, prob away team win)
+                Probabilities are a Mapping:
+                    keys: possible results (str)
+                    values: probability for each possible result (float)
 
         simulation_index: pd.Index | pd.MultiIndex
             Simulated dataframe will have its index set to this.
@@ -96,10 +93,6 @@ def batch_simulate_points_per_match(
     """
     Simulates points each team gained in all matches.
 
-        Win: 3 points
-        Draw: 1 point
-        Loss: 0 points
-
     All matches for a tournament will have the same probabilities.
 
     Simulations are split into 'num_simulations[0]' batches with
@@ -112,8 +105,9 @@ def batch_simulate_points_per_match(
             Mapping each match to its probabilities.
             Index should be in the same order as simulation_index.
 
-                Probabilities are a tuple:
-                    (prob home team win, prob draw, prob away team win)
+                Probabilities are a Mapping:
+                    keys: possible results (str)
+                    values: probability for each possible result (float)
 
         simulation_index: pd.Index | pd.MultiIndex
             Simulated dataframe will have its index set to this.
