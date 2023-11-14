@@ -65,7 +65,7 @@ def test_create_full_schedule_not_random_flipped(
 
     one_schedule = list(
         double_round_robin.get_full_schedule(
-            num_schedules=1, to_randomize_first=None, to_randomize_second=None
+            num_schedules=1, to_randomize_first=None, to_randomize_second="flipped"
         )
     )
     simulated_first = one_schedule[:num_rounds]
@@ -75,7 +75,7 @@ def test_create_full_schedule_not_random_flipped(
 
     two_schedules = list(
         double_round_robin.get_full_schedule(
-            num_schedules=2, to_randomize_first=None, to_randomize_second=None
+            num_schedules=2, to_randomize_first=None, to_randomize_second="mirrored"
         )
     )
     simulated_first = two_schedules[:num_rounds]
@@ -86,4 +86,46 @@ def test_create_full_schedule_not_random_flipped(
     simulated_first = two_schedules[2 * num_rounds : 3 * num_rounds]
     assert first_schedule == simulated_first
     flipped = [tuple((a, h) for h, a in match) for match in simulated_first]
+    assert flipped == two_schedules[3 * num_rounds :]
+
+
+def test_create_full_schedule_not_random_reversed(
+    double_round_robin: drrs.DoubleRoundRobin
+):
+
+    num_rounds = len(double_round_robin.first_schedule)
+    first_schedule = double_round_robin.first_schedule
+
+    one_schedule = list(
+        double_round_robin.get_full_schedule(
+            num_schedules=1, to_randomize_first=None, to_randomize_second="reversed"
+        )
+    )
+    simulated_first = one_schedule[:num_rounds]
+    assert first_schedule == simulated_first
+    flipped = [
+        tuple((a, h) for h, a in reversed(match))
+        for match in reversed(simulated_first)
+    ]
+    assert flipped == one_schedule[num_rounds:]
+
+    two_schedules = list(
+        double_round_robin.get_full_schedule(
+            num_schedules=2, to_randomize_first=None, to_randomize_second="reversed"
+        )
+    )
+    simulated_first = two_schedules[:num_rounds]
+    assert first_schedule == simulated_first
+    flipped = [
+        tuple((a, h) for h, a in reversed(match))
+        for match in reversed(simulated_first)
+    ]
+    assert flipped == two_schedules[num_rounds : 2 * num_rounds]
+
+    simulated_first = two_schedules[2 * num_rounds : 3 * num_rounds]
+    assert first_schedule == simulated_first
+    flipped = [
+        tuple((a, h) for h, a in reversed(match))
+        for match in reversed(simulated_first)
+    ]
     assert flipped == two_schedules[3 * num_rounds :]

@@ -5,6 +5,7 @@ from typing import Callable, Iterable, Iterator, Literal
 
 from ..randomize import Option, RandomizeSchedule
 from ..utils.flip_home_away import flip_home_away_in_schedule
+from ..utils.reversed_schedule import reverse_schedule
 from ..utils.scheduling_types import Round, Team
 from . import create_double_round_robin as create
 
@@ -142,7 +143,7 @@ class DoubleRoundRobin:
         self,
         num_schedules: int,
         to_randomize_first: ToRandomizeType = "all",
-        to_randomize_second: ToRandomizeType | Literal["flipped"] = "flipped",
+        to_randomize_second: ToRandomizeType | Literal["flipped", "mirrored", "reversed"] = "flipped",
     ) -> Iterator[Round]:
 
         """
@@ -179,10 +180,12 @@ class DoubleRoundRobin:
                 Similar to 'to_randomize_first', but there is a new option.
 
                 New option:
-                    "flipped":
+                    "flipped": (or "mirrored")
                         The schedule will be symmetric, that is, the second portion
                         will have the same order as the first, but (home, away) matches
                         will be flipped to (away, home).
+                    "reversed":
+                        The second portion will be the same as the first one, but reversed.
 
         ----
         Returns:
@@ -217,7 +220,10 @@ class DoubleRoundRobin:
             first_schedule = rand_first_schedule.randomize(to_randomize_first)
             yield from first_schedule
 
-            if to_randomize_second == "flipped":
-                yield from flip_home_away_in_schedule(first_schedule)
-            else:
-                yield from rand_second_schedule.randomize(to_randomize_second)
+            match to_randomize_second:
+                case "flipped" | "mirrored":
+                    yield from flip_home_away_in_schedule(first_schedule)
+                case "reversed":
+                    yield from reverse_schedule(first_schedule)
+                case _:
+                    yield from rand_second_schedule.randomize(to_randomize_second)
